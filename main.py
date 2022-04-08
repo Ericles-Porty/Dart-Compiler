@@ -1,33 +1,44 @@
 import ply.lex as lex
 
-tokens = ('COMMA', 'SUM', 'ID', 'NUMBER', 'TIMES', 'POT', 'LPAREN', 'RPAREN', 'EQUALS', 'DIV', 'SUB', 'RETURN', 'WHILE', 'IF', 'ELSE', 'TRUE', 'FALSE', 'CONTINUE', 'BREAK', 'NULL', 'DIFF', 'LESS', 'GREATER', 'LESS_EQ', 'GREATER_EQ', 'SEMICOLON', 'OR', 'AND', 'ASSIGN') 
+tokens = ('ID', 'NUMBER', 'CLASS', 'VAR', 'RETURN', 'WHILE',  'IF', 'ELSE',  'TRUE', 'FALSE', 'NULL', 'SUM', 'SUB', 'TIMES', 'DIV', 'DIV_PART_INT', 'DIV_REST', 'EQUALS', 'DIFF', 'GREATER_EQ', 'LESS_EQ', 'GREATER', 'LESS', 'INVERT_EXPR', 'OR', 'AND', 'AND_BIN', 'OR_BIN', 'INVERT_BIN', 'XOR', 'LPAREN', 'RPAREN', 'COMMA' ,'SEMICOLON',  'ASSIGN') 
 
-t_EQUALS= r'=='
-t_SUM = r'\+'
-t_TIMES = r'\*'
-t_POT = r'\^'
-t_SUB=r'-'
-t_DIV=r'/'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_COMMA = r','
+t_CLASS = r'class'
+t_VAR = r'var'
 t_RETURN = r'return'
 t_WHILE = r'while'
 t_IF = r'if'
 t_ELSE = r'else'
 t_TRUE = r'true'
 t_FALSE = r'false'
-t_CONTINUE = r'continue'
-t_BREAK = r'break'
 t_NULL = r'null'
+
+t_SUM = r'\+'
+t_SUB=r'-'
+t_TIMES = r'\*'
+t_DIV=r'/'
+t_DIV_PART_INT = r'~/'
+t_DIV_REST = r'%'
+
+t_EQUALS= r'=='
 t_DIFF = r'!='
-t_LESS = r'<'
-t_GREATER = r'>'
-t_LESS_EQ = r'<='
 t_GREATER_EQ = r'>='
-t_SEMICOLON = r';'
+t_LESS_EQ = r'<='
+t_GREATER = r'>'
+t_LESS = r'<'
+
+t_INVERT_EXPR = r'!'
 t_OR = r'\|\|'
 t_AND = r'&&'
+
+t_AND_BIN = r'&'
+t_OR_BIN = r'\|'
+t_INVERT_BIN = r'~'
+t_XOR = r'\^'
+
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_COMMA = r','
+t_SEMICOLON = r';'
 t_ASSIGN = r'='
 
 def t_ID(t):

@@ -1,8 +1,9 @@
 import ply.lex as lex
 
-tokens = ('ID', 'NUMBER', 'CLASS', 'VAR', 'RETURN', 'WHILE',  'IF', 'ELSE',  'TRUE', 'FALSE', 'NULL', 'SUM', 'SUB', 'TIMES', 'DIV', 'DIV_PART_INT', 'DIV_REST', 'EQUALS', 'DIFF', 'GREATER_EQ', 'LESS_EQ', 'GREATER', 'LESS', 'INVERT_EXPR', 'OR', 'AND', 'AND_BIN', 'OR_BIN', 'INVERT_BIN', 'XOR', 'LPAREN', 'RPAREN', 'COMMA' ,'SEMICOLON',  'ASSIGN') 
-
+tokens = ('ID', 'NUMBER', 'CLASS', 'IS', 'VAR', 'RETURN', 'WHILE',  'IF', 'ELSE',  'TRUE', 'FALSE', 'NULL', 'SUM', 'SUB', 'TIMES', 'DIV', 'DIV_PART_INT', 'DIV_REST', 'EQUALS', 'DIFF', 'GREATER_EQ', 'LESS_EQ', 'GREATER', 'LESS', 'INVERT_EXPR', 'OR', 'AND', 'AND_BIN', 'OR_BIN', 'INVERT_BIN', 'XOR', 'LPAREN', 'RPAREN', 'COMMA' ,'SEMICOLON',  'ASSIGN', 'COMMENT_BLOCK', 'COMMENT_DOCUMENTATION', 'COMMENT_LINE') 
+  
 t_CLASS = r'class'
+t_IS = r'is'
 t_VAR = r'var'
 t_RETURN = r'return'
 t_WHILE = r'while'
@@ -41,6 +42,20 @@ t_COMMA = r','
 t_SEMICOLON = r';'
 t_ASSIGN = r'='
 
+def t_COMMENT_BLOCK(t):
+  r'/\*(.|\n)*\*/'
+  t.lineno += t.value.count('\n')
+  pass
+
+def t_COMMENT_DOCUMENTATION(t):
+  r'///.*'
+  pass
+  
+def t_COMMENT_LINE(t):
+  r'//.*'
+  pass
+
+  
 def t_ID(t):
   r'[a-zA-Z_][a-zA-Z_0-9]*'
   if t.value == 'id':
@@ -68,7 +83,7 @@ def t_error(t):
 
 lexer = lex.lex()
 
-lexer.input('''if(1=2 || 2>=8) else return \n''')
+lexer.input('''if(1=2 || 2>=8)  is else return ''')
 
 for tok in lexer:
   print(f'Chave:{tok.type}\t\t Valor:{tok.value}\t\t Linha:{tok.lineno}\t\t Posicao:{tok.lexpos}') 

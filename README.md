@@ -108,7 +108,7 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
 
 | Símbolo | Operação |
 | ------------ | ------------ |
-| & | E
+| & | E |
 | \| | Ou | 
 | ^ | Xor |
 | ~expr | Troca o valor binário |
@@ -120,7 +120,8 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
  
 ## 2.4. Literais String
 
-  String é um conjunto de caracteres encadeados que é transformado em uma ou mais palavras.
+String é um conjunto de caracteres encadeados que é transformado em uma ou mais palavras.
+
     Ex:     String frase = “Essa é uma frase”;
             var palavra = ‘Palavra’;
 
@@ -128,6 +129,7 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
  
 ## 2.5. Literais numérica
   Dart tem as variáveis numéricas de 2 tipos primitivos, int para números inteiros e double para números reais, ambas pertencem a classe num.
+  
     Ex:     int inteiro = 10;
             double real = 10.10;
             num numero = 2;
@@ -137,6 +139,7 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
  
 ## 2.6. Literais booleano
   Para valores booleanos o dart armazena em um bit o valor de 1 (true) ou 0 (false).
+  
     Ex:     bool verdade = true;
             bool mentira = false; 
 
@@ -152,12 +155,15 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
  
 ## 2.8. Variáveis
   No dart existem vários tipos diferentes de variáveis, são elas int, double, float, String, void, dynamic, var e num.
-    Ex:     int         inteiro
-            double      real
-            String      palavra
-            dynamic     qualquerTipo
-            var         descubra
-            num         numero
+
+| Tipo | Valor |
+| --- | --- |
+| int         |inteiro|
+| double      |real|
+| String      |palavra|
+| dynamic     |qualquerTipo|
+| var         |descubra|
+| num         |numero|  
             
   <div id='flutter'/>
 

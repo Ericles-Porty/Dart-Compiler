@@ -1,7 +1,14 @@
 import ply.lex as lex
 
-tokens = ('ID', 'NUMBER', 'CLASS', 'IS', 'VAR', 'RETURN', 'WHILE',  'IF', 'ELSE',  'TRUE', 'FALSE', 'NULL', 'SUM', 'SUB', 'TIMES', 'DIV', 'DIV_PART_INT', 'DIV_REST', 'EQUALS', 'DIFF', 'GREATER_EQ', 'LESS_EQ', 'GREATER', 'LESS', 'INVERT_EXPR', 'OR', 'AND', 'AND_BIN', 'OR_BIN', 'INVERT_BIN', 'XOR', 'LPAREN', 'RPAREN', 'COMMA' ,'SEMICOLON',  'ASSIGN', 'COMMENT_BLOCK', 'COMMENT_DOCUMENTATION', 'COMMENT_LINE') 
+tokens = ('ID', 'NUMBER', 'CLASS', 'IS', 'VAR', 'RETURN', 'WHILE',  'IF', 'ELSE',  'TRUE', 'FALSE', 'NULL', 'SUM', 'SUB', 'TIMES', 'DIV', 'DIV_PART_INT', 'DIV_REST', 'EQUALS', 'DIFF', 'GREATER_EQ', 'LESS_EQ', 'GREATER', 'LESS', 'INVERT_EXPR', 'OR', 'AND', 'AND_BIN', 'OR_BIN', 'INVERT_BIN', 'XOR', 'LPAREN', 'RPAREN', 'COMMA' ,'SEMICOLON',  'ASSIGN', 'COMMENT_BLOCK', 'COMMENT_DOCUMENTATION', 'COMMENT_LINE', 'IMPORT', 'STATIC', 'FOR', 'NEW', 'VOID', 'DYNAMIC', 'THIS') 
   
+t_IMPORT = r'import';
+t_STATIC = r'static';
+t_FOR = r'for';
+t_NEW = r'new';
+t_VOID = r'void';
+t_DYNAMIC = r'dynamic';
+t_THIS = r'this';
 t_CLASS = r'class'
 t_IS = r'is'
 t_VAR = r'var'

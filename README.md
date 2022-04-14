@@ -2,8 +2,8 @@
 Analisador léxico, sintático e semântico para a linguagem Dart.
 *******
 ## Sumário
- 1. [1. Introdução](#intro)
- 2. [2. Lexemas do Dart ](#lexemas)
+ * [1. Introdução](#intro)
+ * [2. Lexemas do Dart ](#lexemas)
     * [2.1. Comentários ](#coments)
     * [2.2. Palavras Reservadas  ](#reservadas)
     * [2.3. Operadores e Delimitadores ](#opede)
@@ -16,8 +16,8 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
     * [2.6. Literais booleano ](#lit-booleano)
     * [2.7. Identificador ](#identificador)
     * [2.8. Variáveis ](#variaveis)
- 3. [3. Flutter](#flutter)
- 4. [Referências](#referencia)
+ * [3. Flutter](#flutter)
+ * [4. Referências](#referencia)
 
 *******
 

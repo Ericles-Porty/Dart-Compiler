@@ -130,3 +130,5 @@ dmypy.json
 
 # OTHERS
 .replit
+parser.out
+parsetab.py

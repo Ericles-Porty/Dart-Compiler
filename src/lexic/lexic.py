@@ -37,6 +37,8 @@ t_XOR = r'\^'
 
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_LKEY = R'\{'
+t_RKEY = R'\}'
 t_COMMA = r','
 t_SEMICOLON = r';'
 t_ASSIGN = r'='

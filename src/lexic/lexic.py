@@ -24,7 +24,7 @@ t_DIFF = r'!='
 t_GREATER_EQ = r'>='
 t_LESS_EQ = r'<='
 t_GREATER = r'>'
-t_LESS = r'<'
+t_LESS = r'<' 
 
 t_INVERT_EXPR = r'!'
 t_OR = r'\|\|'

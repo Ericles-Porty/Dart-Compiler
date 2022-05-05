@@ -61,7 +61,7 @@ def p_stm(p):
     #     print('Gerei None', p[1])
 
 def p_exp_assign(p):
-    ''' exp :    exp EQUALS exp1
+    ''' exp :    exp ASSIGN exp1
               | exp1'''
     # if (len(p) == 2):
     #     p[0] = p[1]
@@ -106,16 +106,55 @@ def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
             | exp7'''
 
-def p_exp7_div_rest(p):
-    '''exp7 : SUB exp8 
+def p_exp7_invert_signal(p):
+    '''exp7 : SUB LPAREN exp8 RPAREN 
             | exp8'''
 
-def p_exp4_call(p):
-    '''exp4 : call
+def p_exp8_equals(p):
+    '''exp8 : exp9 EQUALS exp8  
+            | exp9'''
+
+def p_exp9_diff(p):
+    '''exp9 : exp10 DIFF exp9  
+            | exp10'''
+
+def p_exp10_greater(p):
+    '''exp10 : exp11 GREATER exp10  
+            | exp11'''
+
+def p_exp11_less(p):
+    '''exp11 : exp12 LESS exp11 
+            | exp12'''
+
+def p_exp12_greater_equals(p):
+    '''exp12 : exp13 GREATER_EQ exp12 
+            | exp13'''
+
+def p_exp13_less_equals(p):
+    '''exp13 : exp14 LESS_EQ exp13 
+            | exp14'''
+
+def p_exp14_invert_expr(p):
+    '''exp14 : INVERT_EXPR exp15
+            | exp15'''
+
+def p_exp15_or(p):
+    '''exp15 : exp16 OR exp15
+            | LPAREN exp16 OR exp15 RPAREN
+            | exp16'''
+
+def p_exp16_and(p):
+    '''exp16 : exp17 AND exp16
+            | LPAREN exp17 AND exp16 RPAREN
+            | exp17'''
+
+def p_exp17_call(p):
+    '''exp17 : call
             | NUMBER
             | ID
             | TRUE
-            | FALSE'''
+            | FALSE
+            | NULL'''
     # if isinstance(p[1], sa.Call):
     #     p[0] = sa.CallExp(p[1])
     # elif isinstance(p[1], int):
@@ -125,7 +164,17 @@ def p_exp4_call(p):
     # else:
     #     p[0] = sa.IdExp(p[1])
 
+def p_is(p):
+    '''is : IS type
+    '''
 
+def p_types(p):
+  ''' type : INT
+            | NUMBER
+            | ID
+            | STRING
+  '''
+  
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
             | ID LPAREN RPAREN'''

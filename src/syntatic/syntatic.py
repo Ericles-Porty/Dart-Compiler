@@ -1,14 +1,18 @@
 import ply.yacc as yacc
-from src.tokens import tokens
+from src.tokens import *
 
 def p_program(p):
     '''program : funcdecl
-                | funcdecl program
+                | funcdecl program                
+                | CLASS ID body
+                | CLASS ID body program
+                | IMPORT string
+                | IMPORT string program
                 '''
-    if (len(p) == 3):
-        p[0] = [p[1]] + p[2]
-    else:
-        p[0] = [p[1]]
+    # if (len(p) == 3):
+    #     p[0] = [p[1]] + p[2]
+    # else:
+    #     p[0] = [p[1]]
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
@@ -50,6 +54,8 @@ def p_stms(p):
 def p_stm(p):
     ''' stm :  exp SEMICOLON
              | WHILE LPAREN exp RPAREN body
+             | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
+             | IF LPAREN exp RPAREN body             
              | RETURN exp SEMICOLON'''
     # if (len(p) == 3):
     #     p[0] = sa.StmExp(p[1])
@@ -164,15 +170,17 @@ def p_exp17_call(p):
     # else:
     #     p[0] = sa.IdExp(p[1])
 
+def p_string(p):
+    '''
+    string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
+    '''
+
 def p_is(p):
     '''is : IS type
     '''
 
 def p_types(p):
-  ''' type : INT
-            | NUMBER
-            | ID
-            | STRING
+  ''' type : ID
   '''
   
 def p_call_id_params(p):

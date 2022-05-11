@@ -1,16 +1,16 @@
 import ply.lex as lex
-from src.tokens import tokens
+from src.tokens import *
  
-t_CLASS = r'class'
-t_IS = r'is'
-t_VAR = r'var'
-t_RETURN = r'return'
-t_WHILE = r'while'
-t_IF = r'if'
-t_ELSE = r'else'
-t_TRUE = r'true'
-t_FALSE = r'false'
-t_NULL = r'null'
+# t_CLASS = r'class'
+# t_IS = r'is'
+# t_VAR = r'var'
+# t_RETURN = r'return'
+# t_WHILE = r'while'
+# t_IF = r'if'
+# t_ELSE = r'else'
+# t_TRUE = r'true'
+# t_FALSE = r'false'
+# t_NULL = r'null'
 
 t_SUM = r'\+'
 t_SUB=r'-'
@@ -42,6 +42,7 @@ t_RKEY = R'\}'
 t_COMMA = r','
 t_SEMICOLON = r';'
 t_ASSIGN = r'='
+t_DOUBLE_QUOTES =r'"'
 
 def t_COMMENT_BLOCK(t):
   r'/\*(.|\n)*\*/'
@@ -58,14 +59,9 @@ def t_COMMENT_LINE(t):
 
   
 def t_ID(t):
-  r'[a-zA-Z_][a-zA-Z_0-9]*'
-  if t.value == 'id':
-    return t
-  for obj in tokens:
-    if str(obj) == str(t.value).upper():
-      t.type = obj
-      return t
-  return t
+   r'[a-zA-Z_][a-zA-Z_0-9]*'
+   t.type = reservadas.get(t.value,'ID')
+   return t
   
 def t_NUMBER(t):
    r'\d+'

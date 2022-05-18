@@ -1,13 +1,17 @@
 import ply.yacc as yacc
 from src.tokens import *
 
+def p_import(p):
+    '''import : program
+                | IMPORT string
+                | IMPORT string program
+                '''
+
 def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
                 | CLASS ID body
                 | CLASS ID body program
-                | IMPORT string
-                | IMPORT string program
                 '''
     # if (len(p) == 3):
     #     p[0] = [p[1]] + p[2]

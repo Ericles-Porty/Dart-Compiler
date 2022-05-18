@@ -37,7 +37,8 @@ def p_sigparams(p):
 
 def p_body(p):
     ''' body : LKEY stms RKEY
-             | LKEY RKEY'''
+             | LKEY RKEY
+             | stms'''
     # if (len(p) == 4):
     #     p[0] = sa.BodyConcrete(p[2])
     # else:
@@ -55,7 +56,7 @@ def p_stm(p):
     ''' stm :  exp SEMICOLON
              | WHILE LPAREN exp RPAREN body
              | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
-             | IF LPAREN exp RPAREN body             
+             | s             
              | RETURN exp SEMICOLON'''
     # if (len(p) == 3):
     #     p[0] = sa.StmExp(p[1])
@@ -66,8 +67,28 @@ def p_stm(p):
     # else:
     #     print('Gerei None', p[1])
 
+def p_s(p):
+    ''' s :   s1 
+            | s2 '''
+
+def p_e(p):
+    ''' e : LPAREN exp RPAREN '''
+
+def p_s1(p):
+    ''' s1 :  IF e s1 ELSE s1 
+            | IF e body ELSE body 
+            | IF e s1 ELSE body 
+            | IF e body ELSE s1
+            | stms '''
+
+def p_s2(p):
+    ''' s2 :  IF e s 
+            | IF e body 
+            | IF e s1 ELSE s2 
+            | IF e body ELSE s2 '''
+
 def p_exp_assign(p):
-    ''' exp :    exp ASSIGN exp1
+    ''' exp :   exp ASSIGN exp1
               | exp1'''
     # if (len(p) == 2):
     #     p[0] = p[1]

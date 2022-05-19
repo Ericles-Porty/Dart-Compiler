@@ -60,6 +60,23 @@ Analisador léxico, sintático e semântico para a linguagem Dart.
 | do | if | set | yield | default | get |
 | rethrow | while | deferred | hide | return | with |
 
+
+foram utilizadas nesse estudo:
+
+|  | | | |  | |
+| ----------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+| abstract | assert | await| case | get | continue |
+| dynamic | enum | extends|  | final |for |
+|  |in | is | mixin | null | operator |
+|  |  | sync | throw |  | var |
+| as | async | break | catch | const |  |
+| else | export |  | false |  | Function |
+| import |  | library | new | on | part |
+| static | this | true | typedef | void | do | 
+| if | set | yield |  |  | |  
+
+
+
   <div id='opede'/>
 
 ## 2.3. Operadores e Delimitadores

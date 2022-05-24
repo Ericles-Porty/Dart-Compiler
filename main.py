@@ -14,25 +14,23 @@ lexer.input('''if(1==2 if || 2>=8)  is else return ''')
 
 def main():
     s = '''
-    int main(int ok){return x;}
-    int main(int k){return w;}
-    int main(int o){return z;}
+    int main(int ok){return x=0;}
     class uva{}
     '''
     result = parser.parse(s)
     print(result)
-    # visitor = Visitor()
+    visitor = Visitor()
     # print(visitor)
-    # for r in result:
-    #     r.accept(visitor)
-#   while True:
-#       try:
-#           s = input('Digite > ')
-#       except EOFError:
-#           break
-#       if not s: continue
-#       result = parser.parse(s)
-#       print(result)
+    for r in result:
+        r.accept(visitor)
+  # while True:
+  #     try:
+  #         s = input('Digite > ')
+  #     except EOFError:
+  #         break
+  #     if not s: continue
+  #     result = parser.parse(s)
+  #     print(result)
 
 if __name__ == "__main__":
   main()

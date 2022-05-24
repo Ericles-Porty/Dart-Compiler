@@ -7,6 +7,7 @@ def p_header(p):
                 | IMPORT string SEMICOLON
                 | IMPORT string SEMICOLON import
                 '''
+    p[0] = p[1]
 
 def p_program(p):
     '''program : funcdecl
@@ -46,7 +47,9 @@ def p_body(p):
              | stms'''
     if (len(p) == 4):
         p[0] = BodyConcrete(p[2])
-    else:
+    elif (len(p) == 2):
+        p[0] = BodyConcrete(p[1])
+    elif (len(p) == 3):
         p[0] = BodyConcrete(None)
 
 def p_stms(p):
@@ -69,6 +72,9 @@ def p_stm(p):
         p[0] = StmWhile(p[3], p[5])
     elif (p[1] == 'return'):
         p[0] = StmReturn(p[2])
+        print(p[2])
+        print('######################################################')
+        print('entrou')
     else:
         print('Gerei None', p[1])
 

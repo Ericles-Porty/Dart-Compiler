@@ -4,11 +4,19 @@ from src.tokens import *
 Referente ao funcionamento da parte sintática do  Analisador da Linguagem Dart
 
 IMPORT
+exemplo:
+import 'dart:convert';
+
 def p_import(p):
     '''import : program
                 | IMPORT string
                 | IMPORT string program
                 '''
+
+
+PROGRAM
+exemplo:
+
 
 def p_program(p):
     '''program : funcdecl
@@ -21,9 +29,17 @@ def p_program(p):
     # else:
     #     p[0] = [p[1]]
 
+
+DECLARAÇÃO DE FUNÇÃO
+exemplo: void nomeFuncao(){
+
+}
+
 def p_funcdecl(p):
     '''funcdecl : signature body'''
     # p[0] = sa.FuncDeclConcrete(p[1], p[2])
+
+
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -41,6 +57,9 @@ def p_sigparams(p):
     #     p[0] = sa.SingleSigParams(p[1], p[2])
     # else:
     #     p[0] = sa.CompoundSigParams(p[1], p[2], p[4])
+
+CORPO 
+exemplo:
 
 def p_body(p):
     ''' body : LKEY stms RKEY
@@ -102,6 +121,12 @@ def p_exp_assign(p):
     # else:
     #     p[0] = sa.AssignExp(p[1], p[3])
 
+
+EXPRESSÃO DE SOMA
+exemplo:
+1 + 1;
+sa.SomaExp(num1, num2);
+
 def p_exp1_sum(p):
     '''exp1 : exp1 SUM exp2
          | exp2'''
@@ -110,6 +135,10 @@ def p_exp1_sum(p):
     # else:
     #     p[0] = sa.SomaExp(p[1], p[3])
 
+EXPRESSÃO DE SUBTRAÇÃO
+exemplo:
+1 - 1;
+sa.MulExp(num1, num2);
 
 def p_exp2_sub(p):
    '''exp2 : exp2 SUB exp3
@@ -119,6 +148,9 @@ def p_exp2_sub(p):
 #    else:
 #        p[0] = sa.MulExp(p[1], p[3])
 
+EXPRESSÃO DE TEMPO
+exemplo:
+DateTime()
 
 def p_exp3_times(p):
     '''exp3 : exp4 TIMES exp3
@@ -131,57 +163,99 @@ def p_exp3_times(p):
 def p_exp4_times(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
-
+~/
 def p_exp5_div_part_int(p):
     '''exp5 : exp6 DIV_PART_INT exp5
             | exp6'''
+
+
+EXPRESSÃO DE RESTO
+exemplo:
+%numero
 
 def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
             | exp7'''
 
+
+EXPRESSÃO DE INVERTER SINAL
+exemplo:
+-expr
+
 def p_exp7_invert_signal(p):
     '''exp7 : SUB LPAREN exp8 RPAREN 
             | exp8'''
+
+
+EXPRESSÃO DE IGUALDADE
+exemplo:
+num1 == num2;
 
 def p_exp8_equals(p):
     '''exp8 : exp9 EQUALS exp8  
             | exp9'''
 
+EXPRESSÃO DE DIFERENTE 
+exemplo:
+num != num2;
+
 def p_exp9_diff(p):
     '''exp9 : exp10 DIFF exp9  
             | exp10'''
+
+EXPRESSÃO DE MAIOR QUE
+exemplo:
+num1 > num2;
 
 def p_exp10_greater(p):
     '''exp10 : exp11 GREATER exp10  
             | exp11'''
 
+EXPRESSÃO DE MENOR QUE
+exemplo:
+num1 < num2;
 def p_exp11_less(p):
     '''exp11 : exp12 LESS exp11 
             | exp12'''
 
+EXPRESSÃO DE MAIOR OU IGUAL QUE
+exemplo:
+num1 >= num2;
 def p_exp12_greater_equals(p):
     '''exp12 : exp13 GREATER_EQ exp12 
             | exp13'''
 
+EXPRESSÃO DE MENOR OU IGUAL QUE
+exemplo:
+num1 <= num2;
 def p_exp13_less_equals(p):
     '''exp13 : exp14 LESS_EQ exp13 
             | exp14'''
 
+
 def p_exp14_invert_expr(p):
     '''exp14 : INVERT_EXPR exp15
             | exp15'''
+
+EXPRESSÃO DE "OU" QUE
+exemplo:
+num1 || num2;
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
             | LPAREN exp16 OR exp15 RPAREN
             | exp16'''
 
+EXPRESSÃO DE "E" QUE
+exemplo:
+num1 && num2;
+
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
             | exp17'''
 
+#####usuario.nome
 def p_exp17_call(p):
     '''exp17 : call
             | NUMBER
@@ -198,19 +272,36 @@ def p_exp17_call(p):
     # else:
     #     p[0] = sa.IdExp(p[1])
 
+DECLARAÇÃO STRING 
+exemplo:
+String nomeString;
+
 def p_string(p):
     '''
     string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
     '''
 
+DECLARAÇÃO IS
+exemplo:
+IS int
+IS String
+
 def p_is(p):
     '''is : IS type
     '''
 
+DECLARAÇÃO TIPO
+exemplo:
+variavel.runtimeType
+
 def p_types(p):
   ''' type : ID
   '''
-  
+
+DECLARAÇÃO DE FUNÇÃO COM PARAMETRO
+exemplo:  
+nomefunc(param)
+
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
             | ID LPAREN RPAREN'''

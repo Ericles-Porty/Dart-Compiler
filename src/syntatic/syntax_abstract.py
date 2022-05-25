@@ -2,6 +2,21 @@ from abc import abstractmethod
 from abc import ABCMeta
 
 '''
+Declaracao de import
+import
+'''
+class Importe(metaclass=ABCMeta):
+    @abstractmethod
+    def accept(self, visitor):
+        pass
+
+class ImporteConcrete(Importe):
+    def __init__(self, string):
+        self.string = string
+    def accept(self, visitor):
+        return visitor.visitImporteConcrete(self)
+
+'''
 Declaracao de funcao
 FuncDecl
 '''
@@ -16,6 +31,23 @@ class FuncDeclConcrete(FuncDecl):
         self.body = body
     def accept(self, visitor):
         return visitor.visitFuncDeclConcrete(self)
+
+'''
+Assinatura de classe
+Classe
+'''
+class Classe(metaclass=ABCMeta):
+    @abstractmethod
+    def accept(self, visitor):
+        pass
+    
+class ClasseConcrete(Classe):
+    def __init__(self, type, id, body):
+        self.type = type
+        self.id = id
+        self.body = body
+    def accept(self, visitor):
+        return visitor.visitClasseConcrete(self)
 
 '''
 Assinatura de funcao
@@ -169,6 +201,94 @@ class PotExp(Exp):
     def accept(self, visitor):
         return visitor.visitPotExp(self)
 
+class DivExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitDivExp(self)
+
+class DivPartExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitDivPartExp(self)
+
+class DivRestExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitDivRestExp(self)
+
+class InvertExp(Exp):
+    def __init__(self, exp):
+        self.exp = exp
+    def accept(self, visitor):
+        return visitor.visitInvertExp(self)
+
+class EqualsExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitEqualsExp(self)
+
+class DiffExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitDiffExp(self)
+
+class GreaterExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitGreaterExp(self)
+
+class LessExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitLessExp(self)
+
+class GreaterEqualsExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitGreaterEqualsExp(self)
+
+class LessEqualsExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitLessEqualsExp(self)
+
+class InvertBooleanExp(Exp):
+    def __init__(self, exp):
+        self.exp = exp
+    def accept(self, visitor):
+        return visitor.visitInvertBooleanExp(self)
+
+class OrExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitOrExp(self)
+
+class AndExp(Exp):
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
+    def accept(self, visitor):
+        return visitor.visitAndExp(self)
 
 class CallExp(Exp, Stm):
     def __init__(self, call):

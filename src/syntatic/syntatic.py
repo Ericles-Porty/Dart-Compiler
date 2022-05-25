@@ -7,18 +7,32 @@ def p_header(p):
                 | IMPORT string SEMICOLON
                 | IMPORT string SEMICOLON import
                 '''
-    p[0] = p[1]
+    if(len(p) == 2):
+        p[0] = p[1]
+    elif(len(p) == 4):
+        p[0] = [ImporteConcrete(p[2])]
+    elif(len(p) == 5):
+        p[0] = [ImporteConcrete(p[2])] + p[4]
 
 def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
-                | CLASS ID body
-                | CLASS ID body program
+                | classe
                 '''
     if (len(p) == 3):
         p[0] = [p[1]] + p[2]
     else:
         p[0] = [p[1]]
+
+def p_classe(p):
+    '''classe : CLASS ID body
+              | CLASS ID body program
+              '''
+    if (len(p) == 4):
+        p[0] = ClasseConcrete(p[1], p[2], p[3])
+    # elif (len(p) == 5):
+    #     temp = ClasseConcrete(p[1], p[2], p[3])
+    #     p[0] = [temp] + p[4]
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
@@ -73,8 +87,6 @@ def p_stm(p):
     elif (p[1] == 'return'):
         p[0] = StmReturn(p[2])
         print(p[2])
-        print('######################################################')
-        print('entrou')
     else:
         print('Gerei None', p[1])
 
@@ -135,56 +147,109 @@ def p_exp3_times(p):
 def p_exp4_times(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = DivExp(p[1], p[3])
 
 def p_exp5_div_part_int(p):
     '''exp5 : exp6 DIV_PART_INT exp5
             | exp6'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = DivPartExp(p[1], p[3])
 
 def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
             | exp7'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = DivRestExp(p[1], p[3])
 
 def p_exp7_invert_signal(p):
     '''exp7 : SUB LPAREN exp8 RPAREN 
             | exp8'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = InvertExp(p[3])
+    
 
 def p_exp8_equals(p):
     '''exp8 : exp9 EQUALS exp8  
             | exp9'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = EqualsExp(p[1], p[3])
 
 def p_exp9_diff(p):
     '''exp9 : exp10 DIFF exp9  
             | exp10'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = DiffExp(p[1], p[3])
 
 def p_exp10_greater(p):
     '''exp10 : exp11 GREATER exp10  
             | exp11'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = GreaterExp(p[1], p[3])
 
 def p_exp11_less(p):
     '''exp11 : exp12 LESS exp11 
             | exp12'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = LessExp(p[1], p[3])
 
 def p_exp12_greater_equals(p):
     '''exp12 : exp13 GREATER_EQ exp12 
             | exp13'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = GreaterEqualsExp(p[1], p[3])
 
 def p_exp13_less_equals(p):
     '''exp13 : exp14 LESS_EQ exp13 
             | exp14'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = LessEqualsExp(p[1], p[3])
 
 def p_exp14_invert_expr(p):
     '''exp14 : INVERT_EXPR exp15
             | exp15'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = InvertBooleanExp(p[1], p[3])
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
             | LPAREN exp16 OR exp15 RPAREN
             | exp16'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = OrExp(p[1], p[3])
 
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
             | exp17'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = AndExp(p[1], p[3])
 
 def p_exp17_call(p):
     '''exp17 : call
@@ -193,27 +258,29 @@ def p_exp17_call(p):
             | TRUE
             | FALSE
             | NULL'''
-    # if isinstance(p[1], sa.Call):
-    #     p[0] = sa.CallExp(p[1])
-    # elif isinstance(p[1], int):
-    #     p[0] = sa.NumExp(p[1])
-    # elif (p[1] == 'true' or p[1] == 'false'):
-    #     p[0] = sa.BooleanExp(p[1])
-    # else:
-    #     p[0] = sa.IdExp(p[1])
+    if isinstance(p[1], Call):
+        p[0] = CallExp(p[1])
+    elif isinstance(p[1], int):
+        p[0] = NumExp(p[1])
+    elif (p[1] == 'true' or p[1] == 'false'):
+        p[0] = BooleanExp(p[1])
+    else:
+        p[0] = IdExp(p[1])
 
 def p_string(p):
+    '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
     '''
-    string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
-    '''
+    p[0] = p[2]
 
 def p_is(p):
     '''is : IS type
     '''
+    p[0] = p[2]
 
 def p_types(p):
-  ''' type : ID
-  '''
+    ''' type : ID
+    '''
+    p[0] = p[1]
   
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN

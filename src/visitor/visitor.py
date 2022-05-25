@@ -10,9 +10,17 @@ def blank():
 
 class Visitor(AbstractVisitor):
 
+    def visitImporteConcrete(self, importeConcrete):
+        print (blank(), 'import "', importeConcrete.string, '";', sep='')
+
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
         funcDeclConcrete.body.accept(self)
+
+    def visitClasseConcrete(self, classeConcrete):
+        print (blank(), classeConcrete.type, ' ', end='', sep='')
+        print(classeConcrete.id, end = '', sep='')
+        classeConcrete.body.accept(self)
 
     def visitSignatureConcrete(self, signatureConcrete):
         print (blank(), signatureConcrete.type, ' ', end='', sep='')
@@ -86,6 +94,82 @@ class Visitor(AbstractVisitor):
         print(' ^ ', end='')
         potExp.exp2.accept(self)
 
+    def visitDivExp(self, divExp):
+        # print("visitPotExp")
+        divExp.exp1.accept(self)
+        print(' / ', end='')
+        divExp.exp2.accept(self)
+
+    def visitDivPartExp(self, divPartExp):
+        # print("visitPotExp")
+        divPartExp.exp1.accept(self)
+        print(' ~/ ', end='')
+        divPartExp.exp2.accept(self)
+
+    def visitDivRestExp(self, divRestExp):
+        # print("visitPotExp")
+        divRestExp.exp1.accept(self)
+        print(' % ', end='')
+        divRestExp.exp2.accept(self)
+
+    def visitInvertExp(self, invertExp):
+        # print("visitPotExp")
+        print(' - ', end='')
+        invertExp.exp.accept(self)
+
+    def visitEqualsExp(self, equalsExp):
+        # print("visitPotExp")
+        equalsExp.exp1.accept(self)
+        print(' == ', end='')
+        equalsExp.exp2.accept(self)
+
+    def visitDiffExp(self, diffExp):
+        # print("visitPotExp")
+        diffExp.exp1.accept(self)
+        print(' != ', end='')
+        diffExp.exp2.accept(self)
+
+    def visitGreaterExp(self, greaterExp):
+        # print("visitPotExp")
+        greaterExp.exp1.accept(self)
+        print(' > ', end='')
+        greaterExp.exp2.accept(self)
+
+    def visitLessExp(self, lessExp):
+        # print("visitPotExp")
+        lessExp.exp1.accept(self)
+        print(' < ', end='')
+        lessExp.exp2.accept(self)
+
+    def visitGreaterEqualsExp(self, greaterEqualsExp):
+        # print("visitPotExp")
+        greaterEqualsExp.exp1.accept(self)
+        print(' >= ', end='')
+        greaterEqualsExp.exp2.accept(self)
+    
+    def visitLessEqualsExp(self, lessEqualsExp):
+        # print("visitPotExp")
+        lessEqualsExp.exp1.accept(self)
+        print(' <= ', end='')
+        lessEqualsExp.exp2.accept(self)
+
+    def visitInvertBooleanExp(self, invertBooleanExp):
+        # print("visitPotExp")
+        print(' ! ', end='')
+        invertBooleanExp.exp.accept(self)
+
+    def visitOrExp(self, orExp):
+        # print("visitPotExp")
+        orExp.exp1.accept(self)
+        print(' <= ', end='')
+        orExp.exp2.accept(self)
+
+    def visitAndExp(self, andExp):
+        # print("visitPotExp")
+        andExp.exp1.accept(self)
+        print(' <= ', end='')
+        andExp.exp2.accept(self)
+
     def visitCallExp(self, callExp):
         # print("visitCallExp")
         callExp.call.accept(self)
@@ -96,7 +180,7 @@ class Visitor(AbstractVisitor):
 
     def visitIdExp(self, idExp):
         # print("visitIdExp")
-        print(idExp.id, end='')
+        print(idExp.id, ';', end='')
 
     def visitBooleanExp(self, booleanExp):
         print(booleanExp.boolValue, end='')

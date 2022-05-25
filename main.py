@@ -14,8 +14,9 @@ lexer.input('''if(1==2 if || 2>=8)  is else return ''')
 
 def main():
     s = '''
-    int main(int ok){return x=0;}
-    class uva{}
+    import "oi";
+    int main(int ok){while(1==2) {} }
+    class uva{ }
     '''
     result = parser.parse(s)
     print(result)

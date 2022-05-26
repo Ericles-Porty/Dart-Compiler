@@ -91,7 +91,9 @@ def p_return(p):
     '''
     p[0] = StmReturn(p[2])
 
-
+def p_ife(p):
+    '''stm : s'''
+    p[0] = p[1]
 def p_s(p):
     ''' s :   s1 
             | s2 '''
@@ -105,20 +107,22 @@ def p_s1_if0(p):
 def p_s1_if1(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7],None,None)
+    p[0]= StmIfe(p[3],p[5],p[7])
 
 def p_s1_if2(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
     '''
-    p[0]= StmIfe(p[3],None,None,p[5],p[7])
+    p[0]= StmIfe(p[3],p[5],p[7])
 
 def p_s1_if3(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
     '''
+    p[0]= StmIfe(p[3],p[5],p[7])
 
 def p_s1_if4(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
     '''
+    p[0]= StmIfe(p[3],p[5],p[7])
 
 
 
@@ -127,18 +131,24 @@ def p_s1_if4(p):
 def p_s2_if1(p):
     ''' s2 :  IF LPAREN exp RPAREN s  
     '''
+    p[0]= StmIfe(p[3],p[5],None)
 
 def p_s2_if2(p):
     ''' s1 :  IF LPAREN exp RPAREN body 
     '''
+    p[0]= StmIfe(p[3],p[5],None)
 
 def p_s2_if3(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s2 
     '''
+    p[0]= StmIfe(p[3],p[5],p[7])
 
 def p_s2_if4(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE s2
     '''
+    p[0]= StmIfe(p[3],p[5],p[7])
+
+
 
 def p_exp_assign(p):
     ''' exp :   exp ASSIGN exp1
@@ -336,4 +346,4 @@ def p_params_ids(p):
 def p_error(p):
     print("Syntax error in input!")
   
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)

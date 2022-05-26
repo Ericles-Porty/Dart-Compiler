@@ -57,7 +57,7 @@ class Visitor(AbstractVisitor):
     def visitStmExp(self, stmExp):
         print(blank(),sep='',end='')
         stmExp.exp.accept(self)
-        print('')
+        print(';')
 
     def visitStmWhile(self, stmWhile):
         print (blank(), 'while (', end='', sep='')
@@ -71,14 +71,29 @@ class Visitor(AbstractVisitor):
         print (';')
 
     def visitStmFore(self, stmFore):
-        print(blank(), 'for(', end='', sep='')
+        print('for(', end='', sep='')
         stmFore.exp1.accept(self)
         print(';', end='')
         stmFore.exp2.accept(self)
         print(';', end='')
         stmFore.exp3.accept(self)
         print(')')
+        print(blank(), end='')
         stmFore.block.accept(self)
+
+    def visitStmIfe(self, stmIfe):
+        print(blank(), 'if(', end='', sep='')
+        stmIfe.expif.accept(self)
+        print(')',end ='')
+        stmIfe.s11.accept(self)
+        print(blank(),  end='', sep='')
+        if stmIfe.s12 != None:
+            print('else{')
+            # print(stmIfe.s12)
+            stmIfe.s12.accept(self)
+            print('}')
+
+        #s12 else
 
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")

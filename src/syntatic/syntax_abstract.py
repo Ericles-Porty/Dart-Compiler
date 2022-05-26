@@ -171,12 +171,10 @@ class StmFore(Stm):
         return visitor.visitStmFore(self)
 
 class StmIfe(Stm):
-    def __init__(self,expif,s11,s12,block1,block2):
+    def __init__(self,expif,s11,s12):
         self.expif = expif
         self.s11 = s11
         self.s12 = s12
-        self.block1 = block1
-        self.block2 = block2
     def accept(self, visitor):
         return visitor.visitStmIfe(self)
 '''

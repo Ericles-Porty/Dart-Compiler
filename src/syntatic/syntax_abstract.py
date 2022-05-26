@@ -162,21 +162,21 @@ class StmReturn(Stm):
         return visitor.visitStmReturn(self)
     
 class StmFore(Stm):
-    def __init__(self, expif, s11, s12, block1,block2):
+    def __init__(self, exp1, exp2, exp3, block):
+        self.exp1 = exp1
+        self.exp2 = exp2
+        self.exp3 = exp3
+        self.block = block
+    def accept(self, visitor):
+        return visitor.visitStmFore(self)
+
+class StmIfe(Stm):
+    def __init__(self,expif,s11,s12,block1,block2):
         self.expif = expif
         self.s11 = s11
         self.s12 = s12
         self.block1 = block1
         self.block2 = block2
-    def accept(self, visitor):
-        return visitor.visitStmFore(self)
-
-class StmIfe(Stm):
-    def __init__(self,exp1,exp2,exp3,block):
-        self.exp1 = exp1
-        self.exp2 = exp2
-        self.exp3 = exp3
-        self.block = block
     def accept(self, visitor):
         return visitor.visitStmIfe(self)
 '''

@@ -70,6 +70,16 @@ class Visitor(AbstractVisitor):
         stmReturn.exp.accept(self)
         print (';')
 
+    def visitStmFore(self, stmFore):
+        print(blank(), 'for(', end='', sep='')
+        stmFore.exp1.accept(self)
+        print(';', end='')
+        stmFore.exp2.accept(self)
+        print(';', end='')
+        stmFore.exp3.accept(self)
+        print(')')
+        stmFore.block.accept(self)
+
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")
         assignExp.exp1.accept(self)
@@ -87,6 +97,12 @@ class Visitor(AbstractVisitor):
         mulExp.exp1.accept(self)
         print(' * ', end='')
         mulExp.exp2.accept(self)
+
+    def visitSubExp(self, subExp):
+        # print("visitMulExp")
+        subExp.exp1.accept(self)
+        print(' - ', end='')
+        subExp.exp2.accept(self)
 
     def visitPotExp(self, potExp):
         # print("visitPotExp")
@@ -180,7 +196,8 @@ class Visitor(AbstractVisitor):
 
     def visitIdExp(self, idExp):
         # print("visitIdExp")
-        print(idExp.id, ';', end='')
+        print(idExp.id,  end='')
+        # print(idExp.id, ';', end='')
 
     def visitBooleanExp(self, booleanExp):
         print(booleanExp.boolValue, end='')

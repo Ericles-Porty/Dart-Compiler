@@ -18,6 +18,7 @@ def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
                 | classe
+                | classe program
                 '''
     if (len(p) == 3):
         p[0] = [p[1]] + p[2]
@@ -26,13 +27,8 @@ def p_program(p):
 
 def p_classe(p):
     '''classe : CLASS ID body
-              | CLASS ID body program
               '''
-    if (len(p) == 4):
-        p[0] = ClasseConcrete(p[1], p[2], p[3])
-    # elif (len(p) == 5):
-    #     temp = ClasseConcrete(p[1], p[2], p[3])
-    #     p[0] = [temp] + p[4]
+    p[0] = ClasseConcrete(p[1], p[2], p[3])
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
@@ -61,10 +57,10 @@ def p_body(p):
              | stms'''
     if (len(p) == 4):
         p[0] = BodyConcrete(p[2])
-    elif (len(p) == 2):
-        p[0] = BodyConcrete(p[1])
     elif (len(p) == 3):
         p[0] = BodyConcrete(None)
+    elif (len(p) == 2):
+        p[0] = BodyConcrete(p[1])
 
 def p_stms(p):
     ''' stms : stm
@@ -74,41 +70,75 @@ def p_stms(p):
     else:
         p[0] = CompoundStm(p[1], p[2])
 
-def p_stm(p):
+
+def p_while(p):
+    ''' stm : WHILE LPAREN exp RPAREN body
+    '''
+    p[0] = StmWhile(p[3], p[5])
+
+def p_exp(p):
     ''' stm :  exp SEMICOLON
-             | WHILE LPAREN exp RPAREN body
-             | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
-             | s             
-             | RETURN exp SEMICOLON'''
-    if (len(p) == 3):
-        p[0] = StmExp(p[1])
-    elif (p[1] == 'while'):
-        p[0] = StmWhile(p[3], p[5])
-    elif (p[1] == 'return'):
-        p[0] = StmReturn(p[2])
-        print(p[2])
-    else:
-        print('Gerei None', p[1])
+    '''
+    p[0] = StmExp(p[1])
+
+def p_for(p):
+    ''' stm : FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
+    '''
+    p[0] = StmFore(p[3], p[5], p[7], p[9])
+
+def p_return(p):
+    ''' stm : RETURN exp SEMICOLON
+    '''
+    p[0] = StmReturn(p[2])
+
 
 def p_s(p):
     ''' s :   s1 
             | s2 '''
+    p[0] = p[1]
 
-def p_e(p):
-    ''' e : LPAREN exp RPAREN '''
+def p_s1_if0(p):
+    ''' s1 : stms 
+    '''
+    p[0] = p[1]
 
-def p_s1(p):
-    ''' s1 :  IF e s1 ELSE s1 
-            | IF e body ELSE body 
-            | IF e s1 ELSE body 
-            | IF e body ELSE s1
-            | stms '''
+def p_s1_if1(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
+    '''
+    p[0]= StmIfe(p[3],p[5],p[7],None,None)
 
-def p_s2(p):
-    ''' s2 :  IF e s 
-            | IF e body 
-            | IF e s1 ELSE s2 
-            | IF e body ELSE s2 '''
+def p_s1_if2(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
+    '''
+    p[0]= StmIfe(p[3],None,None,p[5],p[7])
+
+def p_s1_if3(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
+    '''
+
+def p_s1_if4(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
+    '''
+
+
+
+
+
+def p_s2_if1(p):
+    ''' s2 :  IF LPAREN exp RPAREN s  
+    '''
+
+def p_s2_if2(p):
+    ''' s1 :  IF LPAREN exp RPAREN body 
+    '''
+
+def p_s2_if3(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s2 
+    '''
+
+def p_s2_if4(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE s2
+    '''
 
 def p_exp_assign(p):
     ''' exp :   exp ASSIGN exp1
@@ -133,7 +163,7 @@ def p_exp2_sub(p):
    if len(p) == 2:
        p[0] = p[1]
    else:
-       p[0] = MulExp(p[1], p[3])
+       p[0] = SubExp(p[1], p[3])
 
 
 def p_exp3_times(p):
@@ -142,9 +172,9 @@ def p_exp3_times(p):
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = PotExp(p[1], p[3])
+        p[0] = MulExp(p[1], p[3])
 
-def p_exp4_times(p):
+def p_exp4_div(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
     if len(p) == 2:
@@ -231,25 +261,29 @@ def p_exp14_invert_expr(p):
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = InvertBooleanExp(p[1], p[3])
+        p[0] = InvertBooleanExp(p[2])
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
             | LPAREN exp16 OR exp15 RPAREN
             | exp16'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
+    if len(p) == 4:
         p[0] = OrExp(p[1], p[3])
+    elif len(p) == 6:
+        p[0] = OrExp(p[2], p[4])
+    else:
+        p[0] = p[1]
 
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
             | exp17'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
+    if len(p) == 4:
         p[0] = AndExp(p[1], p[3])
+    elif len(p) == 6:
+        p[0] = AndExp(p[2], p[4])
+    else:
+        p[0] = p[1]
 
 def p_exp17_call(p):
     '''exp17 : call

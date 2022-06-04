@@ -86,7 +86,7 @@ SIGPARAMS
 exemplo:
 int num
 ##############
-int num1, 
+int num1, int num2 
 
 def p_sigparams(p):
     '''sigparams : ID ID
@@ -96,6 +96,9 @@ def p_sigparams(p):
         p[0] = SingleSigParams(p[1], p[2])
     else:
         p[0] = CompoundSigParams(p[1], p[2], p[4])
+
+BODE
+exemplo:
 
 def p_body(p):
     ''' body : LKEY stms RKEY
@@ -121,6 +124,11 @@ PARAMETRO PONTO E VIRGULA
 exemplo:
 1;
 nomeFuncao();
+while ( i<3 ){
+}
+for ( i=0; i<3; i++){
+}
+return resposta(varia);
 
 def p_stm(p):
     ''' stm :  exp SEMICOLON

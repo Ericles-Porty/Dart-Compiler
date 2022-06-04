@@ -14,7 +14,9 @@ def blank():
 class Visitor(AbstractVisitor):
 
     def visitImporteConcrete(self, importeConcrete):
-        print(blank(), 'import "', importeConcrete.string, '";', sep='')
+        print(blank(), 'import ', sep='', end='')
+        importeConcrete.string.accept(self)
+        print(';')
 
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
@@ -94,15 +96,15 @@ class Visitor(AbstractVisitor):
         stmVar.exp.accept(self)
 
     def visitStmVariableDeclaration(self, variable):
-        if variable.type_var in Types:
-            if(variable.typeType != None):
-               print(variable.typeType, ' ', end='') 
-            print(variable.type_var, ' ', variable.name, ";", sep='')
+        # if variable.type_var in Types:
+        if(variable.type_type != None):
+            print(variable.type_type, ' ', end='') 
+        print(variable.type_var, ' ', variable.name, end='', sep='')
 
     def visitStmVariableDeclarationValue(self, variable):
         if variable.type_var in Types:
-            if(variable.typeType != None):
-               print(variable.typeType, '', end='') 
+            if(variable.type_type != None):
+               print(variable.type_type, '', end='') 
             print(variable.type_var, ' ', variable.name,
                   ' = ', sep='', end='')
             variable.exp.accept(self)
@@ -119,7 +121,7 @@ class Visitor(AbstractVisitor):
         print(';')
 
     def visitStmFore(self, stmFore):
-        print('for(', end='', sep='')
+        print(blank(), 'for(', end='', sep='')
         stmFore.exp1.accept(self)
         print(';', end='')
         stmFore.exp2.accept(self)
@@ -127,19 +129,31 @@ class Visitor(AbstractVisitor):
         stmFore.exp3.accept(self)
         print(')')
         print(blank(), end='')
-        stmFore.block.accept(self)
+        stmFore.body.accept(self)
+
+    # def visitStmForeInline(self, stmFore):
+    #     print(blank(), 'for(', end='', sep='')
+    #     stmFore.exp1.accept(self)
+    #     print(';', end='')
+    #     stmFore.exp2.accept(self)
+    #     print(';', end='')
+    #     stmFore.exp3.accept(self)
+    #     print(')')
+    #     print(blank(), end='')
+    #     stmFore.stm.accept(self)
 
     def visitStmIfe(self, stmIfe):
         print(blank(), 'if(', end='', sep='')
         stmIfe.expif.accept(self)
         print(')', end='')
         stmIfe.s11.accept(self)
-        print(blank(),  end='', sep='')
+        # print(blank(),  end='', sep='')
         if stmIfe.s12 != None:
-            print('else{')
+            print(blank(),  end='', sep='')
+            print('else ')
+            print(blank(),  end='', sep='')
             # print(stmIfe.s12)
             stmIfe.s12.accept(self)
-            print('}')
 
 
 
@@ -201,8 +215,9 @@ class Visitor(AbstractVisitor):
 
     def visitInvertExp(self, invertExp):
         # print("visitPotExp")
-        print(' - ', end='')
+        print(' -(', end='', sep='')
         invertExp.exp.accept(self)
+        print(')', end='')
 
     def visitEqualsExp(self, equalsExp):
         # print("visitPotExp")
@@ -248,13 +263,13 @@ class Visitor(AbstractVisitor):
     def visitOrExp(self, orExp):
         # print("visitPotExp")
         orExp.exp1.accept(self)
-        print(' <= ', end='')
+        print(' || ', end='')
         orExp.exp2.accept(self)
 
     def visitAndExp(self, andExp):
         # print("visitPotExp")
         andExp.exp1.accept(self)
-        print(' <= ', end='')
+        print(' && ', end='')
         andExp.exp2.accept(self)
 
     def visitCallExp(self, callExp):
@@ -270,11 +285,17 @@ class Visitor(AbstractVisitor):
         print(idExp.id,  end='')
         # print(idExp.id, ';', end='')
 
+    def visitStringExp(self, stringExp):
+        print('"', stringExp.id, '"', end='', sep='')
+
     def visitBooleanExp(self, booleanExp):
         print(booleanExp.boolValue, end='')
 
     def visitIsExp(self, IsExp):
-        print(IsExp.exp1, ' is ', IsExp.exp2,';' ,sep='')
+        print(IsExp.exp1, ' is ', IsExp.exp2, sep='', end='')
+
+    def visitPlusPlusExp(self, PlusExp):
+        print(PlusExp.id, '++', end='', sep='')
 
     def visitParamsCall(self, paramsCall):
         # print("visitParamsCall")

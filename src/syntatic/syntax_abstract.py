@@ -205,8 +205,8 @@ class StmVar(Stm):
 
 
 class StmVariableDeclaration(Stm):
-    def __init__(self, typeType, type_var, name):
-        self.typeType = typeType
+    def __init__(self, type_type, type_var, name):
+        self.type_type = type_type
         self.type_var = type_var
         self.name = name
 
@@ -214,8 +214,8 @@ class StmVariableDeclaration(Stm):
         return visitor.visitStmVariableDeclaration(self)
 
 class StmVariableDeclarationValue(Stm):
-    def __init__(self, typeType, type_var, name, exp):
-        self.typeType = typeType
+    def __init__(self, type_type, type_var, name, exp):
+        self.type_type = type_type
         self.type_var = type_var
         self.name = name
         self.exp = exp
@@ -241,14 +241,24 @@ class StmReturn(Stm):
 
 
 class StmFore(Stm):
-    def __init__(self, exp1, exp2, exp3, block):
+    def __init__(self, exp1, exp2, exp3, body):
         self.exp1 = exp1
         self.exp2 = exp2
         self.exp3 = exp3
-        self.block = block
+        self.body = body
 
     def accept(self, visitor):
         return visitor.visitStmFore(self)
+
+# class StmForeInline(Stm):
+#     def __init__(self, exp1, exp2, exp3, stm):
+#         self.exp1 = exp1
+#         self.exp2 = exp2
+#         self.exp3 = exp3
+#         self.stm = stm
+
+#     def accept(self, visitor):
+#         return visitor.visitStmForeInline(self)
 
 
 class StmIfe(Stm):
@@ -482,6 +492,14 @@ class IdExp(Exp):
         return visitor.visitIdExp(self)
 
 
+class StringExp(Exp):
+    def __init__(self, id):
+        self.id = id
+
+    def accept(self, visitor):
+        return visitor.visitStringExp(self)
+
+
 class BooleanExp(Exp):
     def __init__(self, boolValue):
         self.boolValue = boolValue
@@ -497,6 +515,13 @@ class IsExp(Exp):
 
     def accept(self, visitor):
         return visitor.visitIsExp(self)
+
+class PlusPlusExp(Exp):
+    def __init__(self, id):
+        self.id = id
+
+    def accept(self, visitor):
+        return visitor.visitPlusPlusExp(self)
 
 
 '''

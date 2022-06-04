@@ -3,6 +3,8 @@ from src.syntatic.syntatic import parser
 from src.syntatic.syntax_abstract import *
 from src.visitor.abstract_visitor import *
 from src.visitor.visitor import * 
+from src.visitor.semantic_visitor import *
+
 
 
 
@@ -27,18 +29,129 @@ def main():
     class uva{ }
     '''
     s2 = '''typedef int GeeksForGeeks(int a);
+    
             static int main(int ok){
               Orde order;
               order = new Order(new UvaItem(new UvaItem()));
-              Uva uva = new Uva('a');
+              Uva uva = new Uva("a");
               Uva uva = new Uva(5);
 
               GeeksForGeeks(a, b);
 
               this.nome = nome;
             }'''
-    result = parser.parse(s2)
+
+    s3 = ''' import "algo";
+             int metodo();
+             class Algo {} 
+             void main(int a) {
+               /*int a = true;
+                while(a == 9) {
+                  int bok = 5;
+                  for(int i=0; i<5; i++){
+                    int i = 5;
+                  }
+
+                  if(i==2){
+                    int a=0;
+                  } else { 
+                    int a=0;
+                  }
+
+                  if(i==3)
+                    int a=0;
+                  else { 
+                    int a=0;
+                  }
+
+                  if(i==5) {
+                    int a=0;
+                  }
+
+                  if(i==6) {
+                    if(i==6) {
+                      int a=0;
+                    }
+                  }
+
+                  if(i==7) {
+                    while(i == 0){
+                      i is int;
+                    }
+                  }
+
+                  if(i==7) {
+                    if(i==6) {
+                      if(i==6) {
+                        int a=0;
+                      }
+                    }
+                  } else {
+                    if(i==7) {
+                      while(i == 0){
+                        int akfsdfd = 0;
+                      }
+                    }
+                  }
+
+                  if(i==9) {
+                    while(i == 0){
+                      i is int;
+                    }
+                  } else {
+                    if(i==8) {
+                      if(i==6) {
+                        if(i==6) {
+                          int a=0;
+                        }
+                      }
+                    } else {
+                      if(i==8) {
+                        while(i == 0){
+                          i is int;
+                        }
+                      }
+                    }
+                  }
+
+               }*/
+               int a;
+               // od od = new od();
+               od od;
+               od = new od(new odItem(new odItem()));
+               od = new od(5);
+
+               static int a = 1+1;
+               int f = 5 - 5;
+               int s = 3*3;
+               int d = 5/5;
+               int g = 5~/3;
+               int j = 4%3;
+               -(4==5);
+               // int j = -(4==5);
+               int a = 9!=9;
+               int b = 9>9;
+               int c = 8<8;
+               int b = 9>=9;
+               int c = 8<=8;
+               // int c = !(a+b);
+               8||8;
+               8 && 8;
+               // a = "Aq";
+               string a = "Aq";
+            
+               string a = 'Aq';
+               a is int;
+               this.cor = cor;
+               i++;
+             }'''
+
+    operacoes = ''' void main() {
+                  int a = 9+9*9+9;
+                }'''
+    result = parser.parse(s3)
     # print(result)
+    # visitor = SemanticVisitor()
     visitor = Visitor()
     # print(visitor)
     for r in result:

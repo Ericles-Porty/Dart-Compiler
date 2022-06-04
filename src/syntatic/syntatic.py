@@ -96,10 +96,11 @@ def p_variables(p):
 
 def p_variableDeclaration(p):
     ''' variableDeclaration : ID ID'''
-    p[0] = StmVariableDeclaration(p[1], p[2], None)
+    p[0] = StmVariableDeclaration(None, p[1], p[2])
 
 def p_variableDeclarationType(p):
     '''variableDeclaration : ID ID ID'''
+    print("2")
     p[0] = StmVariableDeclaration(p[1], p[2], p[3])
 
 def p_variableDeclarationValue(p):
@@ -132,25 +133,33 @@ def p_for(p):
     p[0] = StmFore(p[3], p[5], p[7], p[9])
 
 
+# def p_forInline(p):
+#     ''' stm : FOR LPAREN variableDeclaration SEMICOLON exp SEMICOLON exp RPAREN stm
+#         | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN stm
+#     '''
+#     p[0] = StmForeInline(p[3], p[5], p[7], p[9])
+
+
 def p_return(p):
     ''' stm : RETURN exp SEMICOLON
     '''
     p[0] = StmReturn(p[2])
 
 
-def p_classeNew(p):
+def p_class_new(p):
     '''stm : ID ID ASSIGN paramsClass SEMICOLON
              | ID ASSIGN paramsClass SEMICOLON
-             | ID ID SEMICOLON '''
+            '''
     if(len(p) == 4):
         p[0] = StmClasseNew(p[1], p[2], None)
     elif(len(p) == 5):
         p[0] = StmClasseNew(None, p[1], p[3])
-    else:
-        p[0] = StmClasseNew(p[1], p[2], p[4])
 
+def p_exp_class(p):
+    ''' exp17 : paramsClass '''
+    p[0] = p[1]
 
-def p_classeNewParams(p):
+def p_class_new_params(p):
     '''paramsClass : NEW ID LPAREN paramsClass RPAREN
                     | NEW ID LPAREN exp17 RPAREN
                     | NEW ID LPAREN RPAREN
@@ -209,19 +218,19 @@ def p_s2_if1(p):
 
 
 def p_s2_if2(p):
-    ''' s1 :  IF LPAREN exp RPAREN body 
+    ''' s2 :  IF LPAREN exp RPAREN body 
     '''
     p[0] = StmIfe(p[3], p[5], None)
 
 
 def p_s2_if3(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s2 
+    ''' s2 :  IF LPAREN exp RPAREN s1 ELSE s2 
     '''
     p[0] = StmIfe(p[3], p[5], p[7])
 
 
 def p_s2_if4(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE s2
+    ''' s2 :  IF LPAREN exp RPAREN body ELSE s2
     '''
     p[0] = StmIfe(p[3], p[5], p[7])
 
@@ -290,7 +299,7 @@ def p_exp6_div_rest(p):
 
 
 def p_exp7_invert_signal(p):
-    '''exp7 : SUB LPAREN exp8 RPAREN 
+    '''exp7 : SUB LPAREN exp RPAREN 
             | exp8'''
     if len(p) == 2:
         p[0] = p[1]
@@ -353,12 +362,12 @@ def p_exp13_less_equals(p):
 
 
 def p_exp14_invert_expr(p):
-    '''exp14 : INVERT_EXPR exp15
+    '''exp14 : INVERT_EXPR LPAREN exp RPAREN
             | exp15'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = InvertBooleanExp(p[2])
+        p[0] = InvertBooleanExp(p[3])
 
 
 def p_exp15_or(p):
@@ -386,28 +395,32 @@ def p_exp16_and(p):
 
 
 def p_exp17_call(p):
-    '''exp17 : call
-            | NUMBER
-            | ID
-            | TRUE
-            | FALSE
-            | NULL
-            | string'''
-    if isinstance(p[1], Call):
-        p[0] = CallExp(p[1])
-    elif isinstance(p[1], int):
-        p[0] = NumExp(p[1])
-    elif (p[1] == 'true' or p[1] == 'false'):
-        p[0] = BooleanExp(p[1])
-    else:
-        p[0] = IdExp(p[1])
+    '''exp17 : call '''
+    p[0] = CallExp(p[1])
 
+def p_exp_id(p):
+    '''exp17 : ID
+             | NULL'''
+    p[0] = IdExp(p[1])
+
+def p_exp_bool(p):
+    '''exp17 : TRUE
+              | FALSE'''
+    p[0] = BooleanExp(p[1])
+
+def p_exp_number(p):
+    '''exp17 : NUMBER'''
+    p[0] = NumExp(p[1]) 
+
+def p_exp_string(p):
+    '''exp17 : string '''
+    p[0] = p[1]
 
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
                 | SINGLE_QUOTES ID SINGLE_QUOTES  
     '''
-    p[0] = p[2]
+    p[0] = StringExp(p[2])
 
 
 def p_is(p):
@@ -420,6 +433,9 @@ def p_this(p):
               '''
     p[0] = AssignThis(p[3], p[5])
 
+def p_plus_plus(p):
+    ''' exp17 : ID SUM SUM'''
+    p[0] = PlusPlusExp(p[1])
 
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN

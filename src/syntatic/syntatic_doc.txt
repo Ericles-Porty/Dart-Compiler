@@ -1,7 +1,13 @@
-import ply.yacc as yacc
-from src.tokens import *
-from src.syntatic.syntax_abstract import *
+Referente ao funcionamento da parte sintática do  Analisador da Linguagem Dart
+// tentei, se ta errado pode apagar tudo
+// utilizei ##### para separar
 
+IMPORT
+exemplos:
+import dart:convert;
+
+import dart:convert;
+import dart:asdasd;
 
 def p_header(p):
     '''import : program
@@ -16,11 +22,21 @@ def p_header(p):
         p[0] = [ImporteConcrete(p[2])] + p[4]
 
 
+PROGRAM
+exemplo:
+
+int nomeFunc(){
+
+}
+
+nomeClasse{
+
+}
+
 def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
                 | classe
-                | classe program
                 '''
     if (len(p) == 3):
         p[0] = [p[1]] + p[2]
@@ -28,16 +44,35 @@ def p_program(p):
         p[0] = [p[1]]
 
 
+DECLARAÇÃO DE CLASSE
+exemplo:
+
+nomeClase(){}
+
 def p_classe(p):
     '''classe : CLASS ID body
+              | CLASS ID body program
               '''
-    p[0] = ClasseConcrete(p[1], p[2], p[3])
+    if (len(p) == 4):
+        p[0] = ClasseConcrete(p[1], p[2], p[3])
+    # elif (len(p) == 5):
+    #     temp = ClasseConcrete(p[1], p[2], p[3])
+    #     p[0] = [temp] + p[4]
 
+
+DECLARAÇÃO DE FUNÇÃO
+exemplo: void nomeFuncao(){
+
+}
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
     p[0] = FuncDeclConcrete(p[1], p[2])
 
+
+SIGNATURE
+exemplo:
+int nomeFunc ( int parametro )
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -47,6 +82,11 @@ def p_signature(p):
     else:
         p[0] = SignatureConcrete(p[1], p[2], None)
 
+SIGPARAMS
+exemplo:
+int num
+##############
+int num1, 
 
 def p_sigparams(p):
     '''sigparams : ID ID
@@ -57,18 +97,16 @@ def p_sigparams(p):
     else:
         p[0] = CompoundSigParams(p[1], p[2], p[4])
 
-
 def p_body(p):
     ''' body : LKEY stms RKEY
              | LKEY RKEY
              | stms'''
     if (len(p) == 4):
         p[0] = BodyConcrete(p[2])
-    elif (len(p) == 3):
-        p[0] = BodyConcrete(None)
     elif (len(p) == 2):
         p[0] = BodyConcrete(p[1])
-
+    elif (len(p) == 3):
+        p[0] = BodyConcrete(None)
 
 def p_stms(p):
     ''' stms : stm
@@ -79,111 +117,103 @@ def p_stms(p):
         p[0] = CompoundStm(p[1], p[2])
 
 
-def p_variables(p):
-    ''' exp17 : variableDeclaration '''
-    p[0] = StmVar(p[1])
+PARAMETRO PONTO E VIRGULA
+exemplo:
+1;
+nomeFuncao();
 
-
-def p_variableDeclaration(p):
-    ''' variableDeclaration : ID ID'''
-    p[0] = StmVariableDeclaration(p[1], p[2])
-
-
-def p_variableDeclarationValue(p):
-    ''' variableDeclaration : ID ID ASSIGN exp17 
-                 '''
-    p[0] = StmVariableDeclarationValue(p[1], p[2], p[4])
-
-
-def p_while(p):
-    ''' stm : WHILE LPAREN exp RPAREN body
-    '''
-    p[0] = StmWhile(p[3], p[5])
-
-
-def p_exp(p):
+def p_stm(p):
     ''' stm :  exp SEMICOLON
-    '''
-    p[0] = StmExp(p[1])
-
-
-def p_for(p):
-    ''' stm : FOR LPAREN variableDeclaration SEMICOLON exp SEMICOLON exp RPAREN body
-        | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
-    '''
-    p[0] = StmFore(p[3], p[5], p[7], p[9])
-
-
-def p_return(p):
-    ''' stm : RETURN exp SEMICOLON
-    '''
-    p[0] = StmReturn(p[2])
-
-
-def p_ife(p):
-    '''stm : s'''
-    p[0] = p[1]
-
+             | WHILE LPAREN exp RPAREN body
+             | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
+             | s             
+             | RETURN exp SEMICOLON'''
+    if (len(p) == 3):
+        p[0] = StmExp(p[1])
+    elif (p[1] == 'while'):
+        p[0] = StmWhile(p[3], p[5])
+    elif (p[1] == 'return'):
+        p[0] = StmReturn(p[2])
+        print(p[2])
+    else:
+        print('Gerei None', p[1])
 
 def p_s(p):
     ''' s :   s1 
             | s2 '''
-    p[0] = p[1]
 
 
-def p_s1_if0(p):
-    ''' s1 : stms 
-    '''
-    p[0] = p[1]
+
+EXPRESSÃO
+exemplos:
+(num = 2)
+def p_e(p):
+    ''' e : LPAREN exp RPAREN '''
+
+IF E ELSE (SE E ENTÃO)
+exemplos:
+if (i<3)
+
+else
+
+#########
+if (i<3){
+
+}else{
+
+}
+#########
+if (i<3)
+
+else{
+
+}
+#########
+if (i<3){
+
+}
+else
 
 
-def p_s1_if1(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
+def p_s1(p):
+    ''' s1 :  IF e s1 ELSE s1 
+            | IF e body ELSE body 
+            | IF e s1 ELSE body 
+            | IF e body ELSE s1
+            | stms '''
 
 
-def p_s1_if2(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
+exemplo:
+if (i<3)
+
+####
+if (i<3){
+
+}
+
+######
+if (i<3) 
+    if (i<3)
+else
+
+######
+if (i<3){
+
+}
+else
+    if (i<3)
+
+    
+def p_s2(p):
+    ''' s2 :  IF e s 
+            | IF e body 
+            | IF e s1 ELSE s2 
+            | IF e body ELSE s2 '''
 
 
-def p_s1_if3(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s1_if4(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s2_if1(p):
-    ''' s2 :  IF LPAREN exp RPAREN s  
-    '''
-    p[0] = StmIfe(p[3], p[5], None)
-
-
-def p_s2_if2(p):
-    ''' s1 :  IF LPAREN exp RPAREN body 
-    '''
-    p[0] = StmIfe(p[3], p[5], None)
-
-
-def p_s2_if3(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s2 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s2_if4(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE s2
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
+PARAMETRO ASSINATURA (recebe)
+exemplo:
+x = 7 
 
 def p_exp_assign(p):
     ''' exp :   exp ASSIGN exp1
@@ -194,6 +224,11 @@ def p_exp_assign(p):
         p[0] = AssignExp(p[1], p[3])
 
 
+EXPRESSÃO DE SOMA
+exemplo:
+1 + 1
+num1 + num2
+
 def p_exp1_sum(p):
     '''exp1 : exp1 SUM exp2
          | exp2'''
@@ -203,14 +238,23 @@ def p_exp1_sum(p):
         p[0] = SomaExp(p[1], p[3])
 
 
-def p_exp2_sub(p):
-    '''exp2 : exp2 SUB exp3
-            | exp3'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = SubExp(p[1], p[3])
+EXPRESSÃO DE SUBTRAÇÃO
+exemplo:
+1 - 1
+num1 - num2
 
+def p_exp2_sub(p):
+   '''exp2 : exp2 SUB exp3
+           | exp3'''
+   if len(p) == 2:
+       p[0] = p[1]
+   else:
+       p[0] = MulExp(p[1], p[3])
+
+
+EXPRESSÃO DE TEMPO
+exemplo:
+4 \* 6
 
 def p_exp3_times(p):
     '''exp3 : exp4 TIMES exp3
@@ -218,10 +262,14 @@ def p_exp3_times(p):
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = MulExp(p[1], p[3])
+        p[0] = PotExp(p[1], p[3])
 
 
-def p_exp4_div(p):
+DIVISÃO
+dividendo / divisor
+4 / 2
+
+def p_exp4_times(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
     if len(p) == 2:
@@ -229,6 +277,10 @@ def p_exp4_div(p):
     else:
         p[0] = DivExp(p[1], p[3])
 
+
+EXPRESSÃO DIVISÃO DA PARTE INTEIRA            
+dividendo ~/ divisor
+4 ~/ 2
 
 def p_exp5_div_part_int(p):
     '''exp5 : exp6 DIV_PART_INT exp5
@@ -239,6 +291,11 @@ def p_exp5_div_part_int(p):
         p[0] = DivPartExp(p[1], p[3])
 
 
+EXPRESSÃO DE RESTO
+exemplo:
+numero1 % numero2
+4 % 2
+
 def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
             | exp7'''
@@ -248,6 +305,11 @@ def p_exp6_div_rest(p):
         p[0] = DivRestExp(p[1], p[3])
 
 
+EXPRESSÃO DE INVERTER SINAL
+exemplo:
+-expr (5)
+-expr (numero)
+
 def p_exp7_invert_signal(p):
     '''exp7 : SUB LPAREN exp8 RPAREN 
             | exp8'''
@@ -255,7 +317,11 @@ def p_exp7_invert_signal(p):
         p[0] = p[1]
     else:
         p[0] = InvertExp(p[3])
+    
 
+EXPRESSÃO DE IGUALDADE
+exemplo:
+num1 == num2
 
 def p_exp8_equals(p):
     '''exp8 : exp9 EQUALS exp8  
@@ -266,6 +332,10 @@ def p_exp8_equals(p):
         p[0] = EqualsExp(p[1], p[3])
 
 
+EXPRESSÃO DE DIFERENTE 
+exemplo:
+num != num2
+
 def p_exp9_diff(p):
     '''exp9 : exp10 DIFF exp9  
             | exp10'''
@@ -274,6 +344,10 @@ def p_exp9_diff(p):
     else:
         p[0] = DiffExp(p[1], p[3])
 
+
+EXPRESSÃO DE MAIOR QUE
+exemplo:
+num1 > num2
 
 def p_exp10_greater(p):
     '''exp10 : exp11 GREATER exp10  
@@ -284,6 +358,10 @@ def p_exp10_greater(p):
         p[0] = GreaterExp(p[1], p[3])
 
 
+EXPRESSÃO DE MENOR QUE
+exemplo:
+num1 < num2
+
 def p_exp11_less(p):
     '''exp11 : exp12 LESS exp11 
             | exp12'''
@@ -292,6 +370,10 @@ def p_exp11_less(p):
     else:
         p[0] = LessExp(p[1], p[3])
 
+
+EXPRESSÃO DE MAIOR OU IGUAL QUE
+exemplo:
+num1 >= num2
 
 def p_exp12_greater_equals(p):
     '''exp12 : exp13 GREATER_EQ exp12 
@@ -302,6 +384,10 @@ def p_exp12_greater_equals(p):
         p[0] = GreaterEqualsExp(p[1], p[3])
 
 
+EXPRESSÃO DE MENOR OU IGUAL QUE
+exemplo:
+num1 <= num2
+
 def p_exp13_less_equals(p):
     '''exp13 : exp14 LESS_EQ exp13 
             | exp14'''
@@ -311,38 +397,53 @@ def p_exp13_less_equals(p):
         p[0] = LessEqualsExp(p[1], p[3])
 
 
+INVERTER
+exemplo:
+!True
+
 def p_exp14_invert_expr(p):
     '''exp14 : INVERT_EXPR exp15
             | exp15'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = InvertBooleanExp(p[2])
+        p[0] = InvertBooleanExp(p[1], p[3])
 
+
+EXPRESSÃO DE "OU" QUE
+exemplo:
+(num1 || num2)
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
             | LPAREN exp16 OR exp15 RPAREN
             | exp16'''
-    if len(p) == 4:
-        p[0] = OrExp(p[1], p[3])
-    elif len(p) == 6:
-        p[0] = OrExp(p[2], p[4])
-    else:
+    if len(p) == 2:
         p[0] = p[1]
+    else:
+        p[0] = OrExp(p[1], p[3])
 
+
+EXPRESSÃO DE "E" QUE
+exemplo:
+(num1 && num2)
 
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
             | exp17'''
-    if len(p) == 4:
-        p[0] = AndExp(p[1], p[3])
-    elif len(p) == 6:
-        p[0] = AndExp(p[2], p[4])
-    else:
+    if len(p) == 2:
         p[0] = p[1]
+    else:
+        p[0] = AndExp(p[1], p[3])
 
+CALL
+exemplo: 
+NUMBER
+ID
+TRUE
+FALSE
+NULL
 
 def p_exp17_call(p):
     '''exp17 : call
@@ -361,17 +462,42 @@ def p_exp17_call(p):
         p[0] = IdExp(p[1])
 
 
+DECLARAÇÃO STRING 
+exemplo:
+"nomeID"
+
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
     '''
     p[0] = p[2]
 
 
-def p_is(p):
-    '''exp17 : ID IS ID
-    '''
-    p[0] = IsExp(p[1], p[3])
+DECLARAÇÃO IS
+exemplo:
+IS int
+IS String
 
+def p_is(p):
+    '''is : IS type
+    '''
+    p[0] = p[2]
+
+
+DECLARAÇÃO TIPO
+exemplo:
+type : int
+
+def p_types(p):
+    ''' type : ID
+    '''
+    p[0] = p[1]
+  
+
+DECLARAÇÃO DE FUNÇÃO COM PARAMETRO
+exemplos:  
+nomeFunc(parametro)
+
+nomeFunc()
 
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
@@ -384,15 +510,18 @@ def p_call_id_params(p):
 
 def p_params_ids(p):
     '''params : exp COMMA params
-              | exp '''
+            | exp '''
     if len(p) == 2:
         p[0] = SingleParam(p[1])
     elif len(p) == 4:
         p[0] = CompoundParams(p[1], p[3])
 
-
 def p_error(p):
     print("Syntax error in input!")
 
+
+CONVERSOR
+exemplo:
+int.parse("1");
 
 parser = yacc.yacc()

@@ -1,6 +1,8 @@
 from src.visitor.abstract_visitor import *
+from src.semantic.SymbolTable import Types
 # global tab
 tab = 0
+
 
 def blank():
     p = ''
@@ -8,26 +10,27 @@ def blank():
         p = p + ' '
     return p
 
+
 class Visitor(AbstractVisitor):
 
     def visitImporteConcrete(self, importeConcrete):
-        print (blank(), 'import "', importeConcrete.string, '";', sep='')
+        print(blank(), 'import "', importeConcrete.string, '";', sep='')
 
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
         funcDeclConcrete.body.accept(self)
 
     def visitClasseConcrete(self, classeConcrete):
-        print (blank(), classeConcrete.type, ' ', end='', sep='')
-        print(classeConcrete.id, end = '', sep='')
+        print(blank(), classeConcrete.type, ' ', end='', sep='')
+        print(classeConcrete.id, end='', sep='')
         classeConcrete.body.accept(self)
 
     def visitSignatureConcrete(self, signatureConcrete):
-        print (blank(), signatureConcrete.type, ' ', end='', sep='')
-        print(signatureConcrete.id, '(', end = '', sep='')
+        print(blank(), signatureConcrete.type, ' ', end='', sep='')
+        print(signatureConcrete.id, '(', end='', sep='')
         if (signatureConcrete.sigParams != None):
             signatureConcrete.sigParams.accept(self)
-        print(')', end = '')
+        print(')', end='')
 
     def visitSingleSigParams(self, singleSigParams):
         print(singleSigParams.type, ' ', end='', sep='')
@@ -40,12 +43,12 @@ class Visitor(AbstractVisitor):
 
     def visitBodyConcrete(self, bodyConcrete):
         global tab
-        print ('{ ')
-        tab =  tab + 3
+        print('{ ')
+        tab = tab + 3
         if (bodyConcrete.stms != None):
             bodyConcrete.stms.accept(self)
-        tab =  tab - 3
-        print (blank(), '} ', sep='')
+        tab = tab - 3
+        print(blank(), '} ', sep='')
 
     def visitSingleStm(self, singleStm):
         singleStm.stm.accept(self)
@@ -55,20 +58,33 @@ class Visitor(AbstractVisitor):
         compoundStm.stms.accept(self)
 
     def visitStmExp(self, stmExp):
-        print(blank(),sep='',end='')
+        print(blank(), sep='', end='')
         stmExp.exp.accept(self)
         print(';')
 
+    def visitStmVar(self, stmVar):
+        stmVar.exp.accept(self)
+
+    def visitStmVariableDeclaration(self, variable):
+        if variable.type_var in Types:
+            print(variable.type_var, ' ', variable.name, ";", sep='')
+
+    def visitStmVariableDeclarationValue(self, variable):
+        if variable.type_var in Types:
+            print(variable.type_var, ' ', variable.name,
+                  ' = ', sep='', end='')
+            variable.exp.accept(self)
+
     def visitStmWhile(self, stmWhile):
-        print (blank(), 'while (', end='', sep='')
+        print(blank(), 'while (', end='', sep='')
         stmWhile.exp.accept(self)
-        print (')', end='', sep='')
+        print(')', end='', sep='')
         stmWhile.block.accept(self)
 
     def visitStmReturn(self, stmReturn):
-        print (blank(), 'return ', end='', sep='')
+        print(blank(), 'return ', end='', sep='')
         stmReturn.exp.accept(self)
-        print (';')
+        print(';')
 
     def visitStmFore(self, stmFore):
         print('for(', end='', sep='')
@@ -84,7 +100,7 @@ class Visitor(AbstractVisitor):
     def visitStmIfe(self, stmIfe):
         print(blank(), 'if(', end='', sep='')
         stmIfe.expif.accept(self)
-        print(')',end ='')
+        print(')', end='')
         stmIfe.s11.accept(self)
         print(blank(),  end='', sep='')
         if stmIfe.s12 != None:
@@ -93,7 +109,9 @@ class Visitor(AbstractVisitor):
             stmIfe.s12.accept(self)
             print('}')
 
-        #s12 else
+
+
+        # s12 else
 
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")
@@ -177,7 +195,7 @@ class Visitor(AbstractVisitor):
         greaterEqualsExp.exp1.accept(self)
         print(' >= ', end='')
         greaterEqualsExp.exp2.accept(self)
-    
+
     def visitLessEqualsExp(self, lessEqualsExp):
         # print("visitPotExp")
         lessEqualsExp.exp1.accept(self)
@@ -216,6 +234,9 @@ class Visitor(AbstractVisitor):
 
     def visitBooleanExp(self, booleanExp):
         print(booleanExp.boolValue, end='')
+
+    def visitIsExp(self, IsExp):
+        print(IsExp.exp1, ' is ', IsExp.exp2,';' ,sep='')
 
     def visitParamsCall(self, paramsCall):
         # print("visitParamsCall")

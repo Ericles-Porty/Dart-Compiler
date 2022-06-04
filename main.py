@@ -7,7 +7,7 @@ from src.visitor.visitor import *
 
 
 
-lexer.input('''if(1==2 if || 2>=8)  is else return ''')
+# lexer.input('''if(1==2 if || 2>=8)  is else return ''')
 
 # for tok in lexer:
 #   print(f'Chave:{tok.type}\t\t Valor:{tok.value}\t\t Linha:{tok.lineno}\t\t Posicao:{tok.lexpos}') 
@@ -16,18 +16,18 @@ def main():
     s = '''
     import "oi";
     int main(int ok){
+      int i =0;
       if (i==0){
-        i=0;
         }
-        for(i=0;i<10;i+1){
-          i=0;
+        for(int i=0;i<10;i+1){
+          i is int;
         }
       }
     class uva{ }
     class uva{ }
     '''
     result = parser.parse(s)
-    print(result)
+    # print(result)
     visitor = Visitor()
     # print(visitor)
     for r in result:

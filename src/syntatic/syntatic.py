@@ -2,6 +2,7 @@ import ply.yacc as yacc
 from src.tokens import *
 from src.syntatic.syntax_abstract import *
 
+
 def p_header(p):
     '''import : program
                 | IMPORT string SEMICOLON
@@ -14,6 +15,7 @@ def p_header(p):
     elif(len(p) == 5):
         p[0] = [ImporteConcrete(p[2])] + p[4]
 
+
 def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
@@ -25,14 +27,17 @@ def p_program(p):
     else:
         p[0] = [p[1]]
 
+
 def p_classe(p):
     '''classe : CLASS ID body
               '''
     p[0] = ClasseConcrete(p[1], p[2], p[3])
 
+
 def p_funcdecl(p):
     '''funcdecl : signature body'''
     p[0] = FuncDeclConcrete(p[1], p[2])
+
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -42,6 +47,7 @@ def p_signature(p):
     else:
         p[0] = SignatureConcrete(p[1], p[2], None)
 
+
 def p_sigparams(p):
     '''sigparams : ID ID
                   | ID ID COMMA sigparams
@@ -50,6 +56,7 @@ def p_sigparams(p):
         p[0] = SingleSigParams(p[1], p[2])
     else:
         p[0] = CompoundSigParams(p[1], p[2], p[4])
+
 
 def p_body(p):
     ''' body : LKEY stms RKEY
@@ -62,6 +69,7 @@ def p_body(p):
     elif (len(p) == 2):
         p[0] = BodyConcrete(p[1])
 
+
 def p_stms(p):
     ''' stms : stm
             | stm stms'''
@@ -71,83 +79,110 @@ def p_stms(p):
         p[0] = CompoundStm(p[1], p[2])
 
 
+def p_variables(p):
+    ''' exp17 : variableDeclaration '''
+    p[0] = StmVar(p[1])
+
+
+def p_variableDeclaration(p):
+    ''' variableDeclaration : ID ID'''
+    p[0] = StmVariableDeclaration(p[1], p[2])
+
+
+def p_variableDeclarationValue(p):
+    ''' variableDeclaration : ID ID ASSIGN exp17 
+                 '''
+    p[0] = StmVariableDeclarationValue(p[1], p[2], p[4])
+
+
 def p_while(p):
     ''' stm : WHILE LPAREN exp RPAREN body
     '''
     p[0] = StmWhile(p[3], p[5])
+
 
 def p_exp(p):
     ''' stm :  exp SEMICOLON
     '''
     p[0] = StmExp(p[1])
 
+
 def p_for(p):
-    ''' stm : FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
+    ''' stm : FOR LPAREN variableDeclaration SEMICOLON exp SEMICOLON exp RPAREN body
+        | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
     '''
     p[0] = StmFore(p[3], p[5], p[7], p[9])
+
 
 def p_return(p):
     ''' stm : RETURN exp SEMICOLON
     '''
     p[0] = StmReturn(p[2])
 
+
 def p_ife(p):
     '''stm : s'''
     p[0] = p[1]
+
+
 def p_s(p):
     ''' s :   s1 
             | s2 '''
     p[0] = p[1]
+
 
 def p_s1_if0(p):
     ''' s1 : stms 
     '''
     p[0] = p[1]
 
+
 def p_s1_if1(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
+    p[0] = StmIfe(p[3], p[5], p[7])
+
 
 def p_s1_if2(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
+    p[0] = StmIfe(p[3], p[5], p[7])
+
 
 def p_s1_if3(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
+    p[0] = StmIfe(p[3], p[5], p[7])
+
 
 def p_s1_if4(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
-
-
-
+    p[0] = StmIfe(p[3], p[5], p[7])
 
 
 def p_s2_if1(p):
     ''' s2 :  IF LPAREN exp RPAREN s  
     '''
-    p[0]= StmIfe(p[3],p[5],None)
+    p[0] = StmIfe(p[3], p[5], None)
+
 
 def p_s2_if2(p):
     ''' s1 :  IF LPAREN exp RPAREN body 
     '''
-    p[0]= StmIfe(p[3],p[5],None)
+    p[0] = StmIfe(p[3], p[5], None)
+
 
 def p_s2_if3(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s2 
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
+    p[0] = StmIfe(p[3], p[5], p[7])
+
 
 def p_s2_if4(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE s2
     '''
-    p[0]= StmIfe(p[3],p[5],p[7])
-
+    p[0] = StmIfe(p[3], p[5], p[7])
 
 
 def p_exp_assign(p):
@@ -157,6 +192,7 @@ def p_exp_assign(p):
         p[0] = p[1]
     else:
         p[0] = AssignExp(p[1], p[3])
+
 
 def p_exp1_sum(p):
     '''exp1 : exp1 SUM exp2
@@ -168,12 +204,12 @@ def p_exp1_sum(p):
 
 
 def p_exp2_sub(p):
-   '''exp2 : exp2 SUB exp3
-           | exp3'''
-   if len(p) == 2:
-       p[0] = p[1]
-   else:
-       p[0] = SubExp(p[1], p[3])
+    '''exp2 : exp2 SUB exp3
+            | exp3'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = SubExp(p[1], p[3])
 
 
 def p_exp3_times(p):
@@ -184,6 +220,7 @@ def p_exp3_times(p):
     else:
         p[0] = MulExp(p[1], p[3])
 
+
 def p_exp4_div(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
@@ -191,6 +228,7 @@ def p_exp4_div(p):
         p[0] = p[1]
     else:
         p[0] = DivExp(p[1], p[3])
+
 
 def p_exp5_div_part_int(p):
     '''exp5 : exp6 DIV_PART_INT exp5
@@ -200,6 +238,7 @@ def p_exp5_div_part_int(p):
     else:
         p[0] = DivPartExp(p[1], p[3])
 
+
 def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
             | exp7'''
@@ -208,6 +247,7 @@ def p_exp6_div_rest(p):
     else:
         p[0] = DivRestExp(p[1], p[3])
 
+
 def p_exp7_invert_signal(p):
     '''exp7 : SUB LPAREN exp8 RPAREN 
             | exp8'''
@@ -215,7 +255,7 @@ def p_exp7_invert_signal(p):
         p[0] = p[1]
     else:
         p[0] = InvertExp(p[3])
-    
+
 
 def p_exp8_equals(p):
     '''exp8 : exp9 EQUALS exp8  
@@ -225,6 +265,7 @@ def p_exp8_equals(p):
     else:
         p[0] = EqualsExp(p[1], p[3])
 
+
 def p_exp9_diff(p):
     '''exp9 : exp10 DIFF exp9  
             | exp10'''
@@ -232,6 +273,7 @@ def p_exp9_diff(p):
         p[0] = p[1]
     else:
         p[0] = DiffExp(p[1], p[3])
+
 
 def p_exp10_greater(p):
     '''exp10 : exp11 GREATER exp10  
@@ -241,6 +283,7 @@ def p_exp10_greater(p):
     else:
         p[0] = GreaterExp(p[1], p[3])
 
+
 def p_exp11_less(p):
     '''exp11 : exp12 LESS exp11 
             | exp12'''
@@ -248,6 +291,7 @@ def p_exp11_less(p):
         p[0] = p[1]
     else:
         p[0] = LessExp(p[1], p[3])
+
 
 def p_exp12_greater_equals(p):
     '''exp12 : exp13 GREATER_EQ exp12 
@@ -257,6 +301,7 @@ def p_exp12_greater_equals(p):
     else:
         p[0] = GreaterEqualsExp(p[1], p[3])
 
+
 def p_exp13_less_equals(p):
     '''exp13 : exp14 LESS_EQ exp13 
             | exp14'''
@@ -265,6 +310,7 @@ def p_exp13_less_equals(p):
     else:
         p[0] = LessEqualsExp(p[1], p[3])
 
+
 def p_exp14_invert_expr(p):
     '''exp14 : INVERT_EXPR exp15
             | exp15'''
@@ -272,6 +318,7 @@ def p_exp14_invert_expr(p):
         p[0] = p[1]
     else:
         p[0] = InvertBooleanExp(p[2])
+
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
@@ -284,6 +331,7 @@ def p_exp15_or(p):
     else:
         p[0] = p[1]
 
+
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
@@ -294,6 +342,7 @@ def p_exp16_and(p):
         p[0] = AndExp(p[2], p[4])
     else:
         p[0] = p[1]
+
 
 def p_exp17_call(p):
     '''exp17 : call
@@ -311,21 +360,19 @@ def p_exp17_call(p):
     else:
         p[0] = IdExp(p[1])
 
+
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
     '''
     p[0] = p[2]
 
-def p_is(p):
-    '''is : IS type
-    '''
-    p[0] = p[2]
 
-def p_types(p):
-    ''' type : ID
+def p_is(p):
+    '''exp17 : ID IS ID
     '''
-    p[0] = p[1]
-  
+    p[0] = IsExp(p[1], p[3])
+
+
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
             | ID LPAREN RPAREN'''
@@ -337,13 +384,15 @@ def p_call_id_params(p):
 
 def p_params_ids(p):
     '''params : exp COMMA params
-            | exp '''
+              | exp '''
     if len(p) == 2:
         p[0] = SingleParam(p[1])
     elif len(p) == 4:
         p[0] = CompoundParams(p[1], p[3])
 
+
 def p_error(p):
     print("Syntax error in input!")
-  
-parser = yacc.yacc(debug=True)
+
+
+parser = yacc.yacc()

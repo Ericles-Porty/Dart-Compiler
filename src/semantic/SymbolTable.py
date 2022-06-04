@@ -13,6 +13,8 @@ FUNCTION = 'fun'
 VARIABLE = 'var'
 SCOPE = 'scope'
 CLASS = 'class'
+STATIC = 'static'
+TYPEDEF = 'typedef'
 
 Number = [INT, DOUBLE]
 

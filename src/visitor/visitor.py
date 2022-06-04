@@ -18,7 +18,10 @@ class Visitor(AbstractVisitor):
 
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
-        funcDeclConcrete.body.accept(self)
+        if(funcDeclConcrete.body != None):
+            funcDeclConcrete.body.accept(self)
+        elif(funcDeclConcrete.body == None):
+            print(';')
 
     def visitClasseConcrete(self, classeConcrete):
         print(blank(), classeConcrete.type, ' ', end='', sep='')
@@ -40,6 +43,31 @@ class Visitor(AbstractVisitor):
         print(compoundSigParams.type, ' ', end='', sep='')
         print(compoundSigParams.id, ', ', end='', sep='')
         compoundSigParams.sigParams.accept(self)
+
+    def visitStmsignatureType(self, signatureType):
+        print(signatureType.staticT, ' ', end='', sep='')
+        print(signatureType.type, ' ', end='', sep='')
+        print(signatureType.id, '(', end='', sep='')
+        if (signatureType.sigParams != None):
+            signatureType.sigParams.accept(self)
+        print(')', end='')
+
+    def visitStmClasseNew(self, injecaoClass):
+        print(blank(), end='')
+        if (injecaoClass.s1 != None):
+            print(injecaoClass.s1, end=' ', sep='')
+        print(injecaoClass.s2, end='', sep='')
+        if (injecaoClass.paramsClass != None):
+            print(end=' = ', sep='')
+            injecaoClass.paramsClass.accept(self)
+        print(';')
+
+    def visitStmClasseNewParams(self, injecaoClass):
+        print('new ', end='', sep='')
+        print(injecaoClass.s1, '(', end='', sep='')
+        if (injecaoClass.paramsClass != None):
+            injecaoClass.paramsClass.accept(self)
+        print(')', end='')
 
     def visitBodyConcrete(self, bodyConcrete):
         global tab
@@ -67,10 +95,14 @@ class Visitor(AbstractVisitor):
 
     def visitStmVariableDeclaration(self, variable):
         if variable.type_var in Types:
+            if(variable.typeType != None):
+               print(variable.typeType, ' ', end='') 
             print(variable.type_var, ' ', variable.name, ";", sep='')
 
     def visitStmVariableDeclarationValue(self, variable):
         if variable.type_var in Types:
+            if(variable.typeType != None):
+               print(variable.typeType, '', end='') 
             print(variable.type_var, ' ', variable.name,
                   ' = ', sep='', end='')
             variable.exp.accept(self)
@@ -118,6 +150,12 @@ class Visitor(AbstractVisitor):
         assignExp.exp1.accept(self)
         print(' = ', end='')
         assignExp.exp2.accept(self)
+
+    def visitAssignThis(self, assignThis):
+        print("This.", end='')
+        print(assignThis.s1, end='')
+        print(' =', assignThis.s2, end='')
+        # assignThis.s2.accept(self)
 
     def visitSomaExp(self, somaExp):
         # print("visitSomaExp")

@@ -26,7 +26,18 @@ def main():
     class uva{ }
     class uva{ }
     '''
-    result = parser.parse(s)
+    s2 = '''typedef int GeeksForGeeks(int a);
+            static int main(int ok){
+              Orde order;
+              order = new Order(new UvaItem(new UvaItem()));
+              Uva uva = new Uva('a');
+              Uva uva = new Uva(5);
+
+              GeeksForGeeks(a, b);
+
+              this.nome = nome;
+            }'''
+    result = parser.parse(s2)
     # print(result)
     visitor = Visitor()
     # print(visitor)

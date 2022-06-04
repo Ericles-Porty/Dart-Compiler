@@ -33,11 +33,21 @@ def p_classe(p):
               '''
     p[0] = ClasseConcrete(p[1], p[2], p[3])
 
-
 def p_funcdecl(p):
-    '''funcdecl : signature body'''
+    '''funcdecl : signature body '''
     p[0] = FuncDeclConcrete(p[1], p[2])
 
+def p_funcdeclOne(p):
+    '''funcdecl : signature SEMICOLON'''
+    p[0] = FuncDeclConcrete(p[1], None)
+
+def p_signatureType(p):
+    '''signature : ID ID ID LPAREN sigparams RPAREN
+                 | ID ID ID LPAREN RPAREN'''
+    if (isinstance(p[5], SigParams)):
+        p[0] = StmsignatureType(p[1], p[2], p[3], p[5])
+    else:
+        p[0] = StmsignatureType(p[1], p[2], p[3], None)
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -86,13 +96,21 @@ def p_variables(p):
 
 def p_variableDeclaration(p):
     ''' variableDeclaration : ID ID'''
-    p[0] = StmVariableDeclaration(p[1], p[2])
+    p[0] = StmVariableDeclaration(p[1], p[2], None)
 
+def p_variableDeclarationType(p):
+    '''variableDeclaration : ID ID ID'''
+    p[0] = StmVariableDeclaration(p[1], p[2], p[3])
 
 def p_variableDeclarationValue(p):
     ''' variableDeclaration : ID ID ASSIGN exp17 
                  '''
-    p[0] = StmVariableDeclarationValue(p[1], p[2], p[4])
+    p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])
+
+def p_variableDeclarationValueType(p):
+    ''' variableDeclaration : ID ID ID ASSIGN exp17 
+                 '''
+    p[0] = StmVariableDeclarationValue(p[1], p[2], p[3], p[5])
 
 
 def p_while(p):
@@ -118,6 +136,29 @@ def p_return(p):
     ''' stm : RETURN exp SEMICOLON
     '''
     p[0] = StmReturn(p[2])
+
+
+def p_classeNew(p):
+    '''stm : ID ID ASSIGN paramsClass SEMICOLON
+             | ID ASSIGN paramsClass SEMICOLON
+             | ID ID SEMICOLON '''
+    if(len(p) == 4):
+        p[0] = StmClasseNew(p[1], p[2], None)
+    elif(len(p) == 5):
+        p[0] = StmClasseNew(None, p[1], p[3])
+    else:
+        p[0] = StmClasseNew(p[1], p[2], p[4])
+
+
+def p_classeNewParams(p):
+    '''paramsClass : NEW ID LPAREN paramsClass RPAREN
+                    | NEW ID LPAREN exp17 RPAREN
+                    | NEW ID LPAREN RPAREN
+              '''
+    if (len(p) == 6):
+        p[0] = StmClasseNewParams(p[2], p[4])
+    else:
+        p[0] = StmClasseNewParams(p[2], None)
 
 
 def p_ife(p):
@@ -350,7 +391,8 @@ def p_exp17_call(p):
             | ID
             | TRUE
             | FALSE
-            | NULL'''
+            | NULL
+            | string'''
     if isinstance(p[1], Call):
         p[0] = CallExp(p[1])
     elif isinstance(p[1], int):
@@ -363,6 +405,7 @@ def p_exp17_call(p):
 
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
+                | SINGLE_QUOTES ID SINGLE_QUOTES  
     '''
     p[0] = p[2]
 
@@ -371,6 +414,11 @@ def p_is(p):
     '''exp17 : ID IS ID
     '''
     p[0] = IsExp(p[1], p[3])
+
+def p_this(p):
+    ''' exp17 : THIS SCORE ID ASSIGN ID
+              '''
+    p[0] = AssignThis(p[3], p[5])
 
 
 def p_call_id_params(p):

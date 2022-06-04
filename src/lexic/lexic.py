@@ -43,6 +43,8 @@ t_COMMA = r','
 t_SEMICOLON = r';'
 t_ASSIGN = r'='
 t_DOUBLE_QUOTES =r'"'
+t_SINGLE_QUOTES =r'\''
+t_SCORE = r'.'
 
 def t_COMMENT_BLOCK(t):
   r'/\*(.|\n)*\*/'

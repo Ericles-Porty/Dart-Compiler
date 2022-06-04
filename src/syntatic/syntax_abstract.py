@@ -116,6 +116,16 @@ class CompoundSigParams(SigParams):
     def accept(self, visitor):
         return visitor.visitCompoundSigParams(self)
 
+class StmsignatureType(SigParams):
+    def __init__(self, staticT, type, id, sigParams):
+        self.staticT = staticT
+        self.type = type
+        self.id = id
+        self.sigParams = sigParams
+
+    def accept(self, visitor):
+        return visitor.visitStmsignatureType(self)
+
 
 '''
 Corpo de uma funcao
@@ -195,23 +205,23 @@ class StmVar(Stm):
 
 
 class StmVariableDeclaration(Stm):
-    def __init__(self, type_var, name):
+    def __init__(self, typeType, type_var, name):
+        self.typeType = typeType
         self.type_var = type_var
         self.name = name
 
     def accept(self, visitor):
         return visitor.visitStmVariableDeclaration(self)
 
-
 class StmVariableDeclarationValue(Stm):
-    def __init__(self, type_var, name, exp):
+    def __init__(self, typeType, type_var, name, exp):
+        self.typeType = typeType
         self.type_var = type_var
         self.name = name
         self.exp = exp
 
     def accept(self, visitor):
         return visitor.visitStmVariableDeclarationValue(self)
-
 
 class StmWhile(Stm):
     def __init__(self, exp, block):
@@ -250,6 +260,22 @@ class StmIfe(Stm):
     def accept(self, visitor):
         return visitor.visitStmIfe(self)
 
+class StmClasseNew(Stm):
+    def __init__(self, s1, s2, paramsClass):
+        self.s1 = s1
+        self.s2 = s2
+        self.paramsClass = paramsClass
+
+    def accept(self, visitor):
+        return visitor.visitStmClasseNew(self)
+
+class StmClasseNewParams(Stm):
+    def __init__(self, s1, paramsClass):
+        self.s1 = s1
+        self.paramsClass = paramsClass
+
+    def accept(self, visitor):
+        return visitor.visitStmClasseNewParams(self)
 
 '''
 Expressoes
@@ -270,6 +296,15 @@ class AssignExp(Exp):
 
     def accept(self, visitor):
         return visitor.visitAssignExp(self)
+
+
+class AssignThis(Exp):
+    def __init__(self, s1, s2):
+        self.s1 = s1
+        self.s2 = s2
+
+    def accept(self, visitor):
+        return visitor.visitAssignThis(self)
 
 
 class SomaExp(Exp):

@@ -116,7 +116,7 @@ def main():
 
                }*/
                int a;
-               // od od = new od();
+               od od = new od();
                od od;
                od = new od(new odItem(new odItem()));
                od = new od(5);
@@ -128,28 +128,28 @@ def main():
                int g = 5~/3;
                int j = 4%3;
                -(4==5);
-               // int j = -(4==5);
+               int j = -(4==5);
                int a = 9!=9;
                int b = 9>9;
                int c = 8<8;
                int b = 9>=9;
                int c = 8<=8;
-               // int c = !(a+b);
+               int c = !(a==b);
                8||8;
                8 && 8;
-               // a = "Aq";
+               //a = 'Aq';
                string a = "Aq";
             
                string a = 'Aq';
                a is int;
                this.cor = cor;
-               i++;
+               i--;
              }'''
 
     operacoes = ''' void main() {
                   int a = 9+9*9+9;
                 }'''
-    result = parser.parse(s3)
+    result = parser.parse(s3,debug=True)
     # print(result)
     # visitor = SemanticVisitor()
     visitor = Visitor()

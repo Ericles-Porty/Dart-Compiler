@@ -33,13 +33,16 @@ def p_classe(p):
               '''
     p[0] = ClasseConcrete(p[1], p[2], p[3])
 
+
 def p_funcdecl(p):
     '''funcdecl : signature body '''
     p[0] = FuncDeclConcrete(p[1], p[2])
 
+
 def p_funcdeclOne(p):
     '''funcdecl : signature SEMICOLON'''
     p[0] = FuncDeclConcrete(p[1], None)
+
 
 def p_signatureType(p):
     '''signature : ID ID ID LPAREN sigparams RPAREN
@@ -48,6 +51,7 @@ def p_signatureType(p):
         p[0] = StmsignatureType(p[1], p[2], p[3], p[5])
     else:
         p[0] = StmsignatureType(p[1], p[2], p[3], None)
+
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -80,6 +84,11 @@ def p_body(p):
         p[0] = BodyConcrete(p[1])
 
 
+'''
+Stms e stm
+'''
+
+
 def p_stms(p):
     ''' stms : stm
             | stm stms'''
@@ -87,31 +96,6 @@ def p_stms(p):
         p[0] = SingleStm(p[1])
     else:
         p[0] = CompoundStm(p[1], p[2])
-
-
-def p_variables(p):
-    ''' exp17 : variableDeclaration '''
-    p[0] = StmVar(p[1])
-
-
-def p_variableDeclaration(p):
-    ''' variableDeclaration : ID ID'''
-    p[0] = StmVariableDeclaration(None, p[1], p[2])
-
-def p_variableDeclarationType(p):
-    '''variableDeclaration : ID ID ID'''
-    print("2")
-    p[0] = StmVariableDeclaration(p[1], p[2], p[3])
-
-def p_variableDeclarationValue(p):
-    ''' variableDeclaration : ID ID ASSIGN exp17 
-                 '''
-    p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])
-
-def p_variableDeclarationValueType(p):
-    ''' variableDeclaration : ID ID ID ASSIGN exp17 
-                 '''
-    p[0] = StmVariableDeclarationValue(p[1], p[2], p[3], p[5])
 
 
 def p_while(p):
@@ -150,18 +134,15 @@ def p_class_new(p):
     '''stm : ID ID ASSIGN paramsClass SEMICOLON
              | ID ASSIGN paramsClass SEMICOLON
             '''
-    if(len(p) == 4):
-        p[0] = StmClasseNew(p[1], p[2], None)
+    if(len(p) == 6):
+        p[0] = StmClasseNew(p[1], p[2], p[4])
     elif(len(p) == 5):
         p[0] = StmClasseNew(None, p[1], p[3])
 
-def p_exp_class(p):
-    ''' exp17 : paramsClass '''
-    p[0] = p[1]
 
 def p_class_new_params(p):
     '''paramsClass : NEW ID LPAREN paramsClass RPAREN
-                    | NEW ID LPAREN exp17 RPAREN
+                    | NEW ID LPAREN terminal RPAREN
                     | NEW ID LPAREN RPAREN
               '''
     if (len(p) == 6):
@@ -170,69 +151,9 @@ def p_class_new_params(p):
         p[0] = StmClasseNewParams(p[2], None)
 
 
-def p_ife(p):
-    '''stm : s'''
-    p[0] = p[1]
-
-
-def p_s(p):
-    ''' s :   s1 
-            | s2 '''
-    p[0] = p[1]
-
-
-def p_s1_if0(p):
-    ''' s1 : stms 
-    '''
-    p[0] = p[1]
-
-
-def p_s1_if1(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s1_if2(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s1_if3(p):
-    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s1_if4(p):
-    ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s2_if1(p):
-    ''' s2 :  IF LPAREN exp RPAREN s  
-    '''
-    p[0] = StmIfe(p[3], p[5], None)
-
-
-def p_s2_if2(p):
-    ''' s2 :  IF LPAREN exp RPAREN body 
-    '''
-    p[0] = StmIfe(p[3], p[5], None)
-
-
-def p_s2_if3(p):
-    ''' s2 :  IF LPAREN exp RPAREN s1 ELSE s2 
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
-
-
-def p_s2_if4(p):
-    ''' s2 :  IF LPAREN exp RPAREN body ELSE s2
-    '''
-    p[0] = StmIfe(p[3], p[5], p[7])
+'''
+Regras exp
+'''
 
 
 def p_exp_assign(p):
@@ -383,9 +304,9 @@ def p_exp15_or(p):
 
 
 def p_exp16_and(p):
-    '''exp16 : exp17 AND exp16
-            | LPAREN exp17 AND exp16 RPAREN
-            | exp17'''
+    '''exp16 : terminal AND exp16
+            | LPAREN terminal AND exp16 RPAREN
+            | terminal'''
     if len(p) == 4:
         p[0] = AndExp(p[1], p[3])
     elif len(p) == 6:
@@ -394,27 +315,64 @@ def p_exp16_and(p):
         p[0] = p[1]
 
 
-def p_exp17_call(p):
-    '''exp17 : call '''
+'''
+Terminais
+'''
+
+
+def p_exp_class(p):
+    ''' terminal : paramsClass '''
+    p[0] = p[1]
+
+
+def p_terminal_call(p):
+    '''terminal : call '''
     p[0] = CallExp(p[1])
 
+
 def p_exp_id(p):
-    '''exp17 : ID
+    '''terminal : ID
              | NULL'''
     p[0] = IdExp(p[1])
 
+
 def p_exp_bool(p):
-    '''exp17 : TRUE
+    '''terminal : TRUE
               | FALSE'''
     p[0] = BooleanExp(p[1])
 
+
 def p_exp_number(p):
-    '''exp17 : NUMBER'''
-    p[0] = NumExp(p[1]) 
+    '''terminal : NUMBER'''
+    p[0] = NumExp(p[1])
+
+
+def p_is(p):
+    '''terminal : ID IS ID
+    '''
+    p[0] = IsExp(p[1], p[3])
+
+
+def p_this(p):
+    ''' terminal : THIS DOT ID ASSIGN ID
+              '''
+    p[0] = AssignThis(p[3], p[5])
+
+
+def p_plus_plus(p):
+    ''' terminal : ID SUM SUM'''
+    p[0] = PlusPlusExp(p[1])
+
+
+def p_minus_minus(p):
+    ''' terminal : ID SUB SUB'''
+    p[0] = MinusMinusExp(p[1])
+
 
 def p_exp_string(p):
-    '''exp17 : string '''
+    '''terminal : string '''
     p[0] = p[1]
+
 
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
@@ -423,19 +381,30 @@ def p_string(p):
     p[0] = StringExp(p[2])
 
 
-def p_is(p):
-    '''exp17 : ID IS ID
-    '''
-    p[0] = IsExp(p[1], p[3])
+def p_variables(p):
+    ''' terminal : variableDeclaration '''
+    p[0] = StmVar(p[1])
 
-def p_this(p):
-    ''' exp17 : THIS SCORE ID ASSIGN ID
-              '''
-    p[0] = AssignThis(p[3], p[5])
 
-def p_plus_plus(p):
-    ''' exp17 : ID SUM SUM'''
-    p[0] = PlusPlusExp(p[1])
+def p_variable_declaration(p):
+    ''' variableDeclaration : ID ID'''
+    p[0] = StmVariableDeclaration(None, p[1], p[2])
+
+
+def p_variable_declaration_type(p):
+    '''variableDeclaration : ID ID ID'''
+    p[0] = StmVariableDeclaration(p[1], p[2], p[3])
+
+
+def p_variable_declaration_value(p):
+    ''' variableDeclaration : ID ID ASSIGN exp'''
+    p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])
+
+
+def p_variable_declaration_value_type(p):
+    ''' variableDeclaration : ID ID ID ASSIGN exp'''
+    p[0] = StmVariableDeclarationValue(p[1], p[2], p[3], p[5])
+
 
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
@@ -455,8 +424,78 @@ def p_params_ids(p):
         p[0] = CompoundParams(p[1], p[3])
 
 
+'''
+Regras if
+'''
+
+
+def p_ife(p):
+    '''stm : s'''
+    p[0] = p[1]
+
+
+def p_s(p):
+    ''' s :   s1 
+            | s2 '''
+    p[0] = p[1]
+
+
+def p_s1_if0(p):
+    ''' s1 : stms 
+    '''
+    p[0] = p[1]
+
+
+def p_s1_if1(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
+def p_s1_if2(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
+def p_s1_if3(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
+def p_s1_if4(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
+def p_s2_if1(p):
+    ''' s2 :  IF LPAREN exp RPAREN s  
+    '''
+    p[0] = StmIfe(p[3], p[5], None)
+
+
+def p_s2_if2(p):
+    ''' s2 :  IF LPAREN exp RPAREN body 
+    '''
+    p[0] = StmIfe(p[3], p[5], None)
+
+
+def p_s2_if3(p):
+    ''' s2 :  IF LPAREN exp RPAREN s1 ELSE s2 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
+def p_s2_if4(p):
+    ''' s2 :  IF LPAREN exp RPAREN body ELSE s2
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+
 def p_error(p):
     print("Syntax error in input!")
 
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)

@@ -280,8 +280,8 @@ class StmClasseNew(Stm):
         return visitor.visitStmClasseNew(self)
 
 class StmClasseNewParams(Stm):
-    def __init__(self, s1, paramsClass):
-        self.s1 = s1
+    def __init__(self, name, paramsClass):
+        self.name = name
         self.paramsClass = paramsClass
 
     def accept(self, visitor):
@@ -523,7 +523,12 @@ class PlusPlusExp(Exp):
     def accept(self, visitor):
         return visitor.visitPlusPlusExp(self)
 
+class MinusMinusExp(Exp):
+    def __init__(self, id):
+        self.id = id
 
+    def accept(self, visitor):
+        return visitor.visitMinusMinusExp(self)
 '''
 Chamada de funcao
 Call

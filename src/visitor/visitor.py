@@ -59,14 +59,13 @@ class Visitor(AbstractVisitor):
         if (injecaoClass.s1 != None):
             print(injecaoClass.s1, end=' ', sep='')
         print(injecaoClass.s2, end='', sep='')
-        if (injecaoClass.paramsClass != None):
-            print(end=' = ', sep='')
-            injecaoClass.paramsClass.accept(self)
+        print(end=' = ', sep='')
+        injecaoClass.paramsClass.accept(self)
         print(';')
 
     def visitStmClasseNewParams(self, injecaoClass):
         print('new ', end='', sep='')
-        print(injecaoClass.s1, '(', end='', sep='')
+        print(injecaoClass.name, '(', end='', sep='')
         if (injecaoClass.paramsClass != None):
             injecaoClass.paramsClass.accept(self)
         print(')', end='')
@@ -296,6 +295,9 @@ class Visitor(AbstractVisitor):
 
     def visitPlusPlusExp(self, PlusExp):
         print(PlusExp.id, '++', end='', sep='')
+    
+    def visitMinusMinusExp(self, MinusExp):
+        print(MinusExp.id, '--', end='', sep='')
 
     def visitParamsCall(self, paramsCall):
         # print("visitParamsCall")

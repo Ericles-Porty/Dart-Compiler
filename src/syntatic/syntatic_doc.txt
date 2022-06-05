@@ -158,7 +158,7 @@ def p_sigparams(p):
         p[0] = CompoundSigParams(p[1], p[2], p[4])
         
 #####################################################################################
-BODE
+BODY
 exemplo:
 void main(){
     int a = 1;
@@ -180,10 +180,11 @@ def p_body(p):
              | stms'''
     if (len(p) == 4):
         p[0] = BodyConcrete(p[2])
-    elif (len(p) == 2):
-        p[0] = BodyConcrete(p[1])
     elif (len(p) == 3):
         p[0] = BodyConcrete(None)
+    elif (len(p) == 2):
+        p[0] = BodyConcrete(p[1])
+    
         
 #####################################################################################
 STMS
@@ -291,7 +292,7 @@ def p_exp(p):
 FOR (para)
 exemplos:
 void main(){
-   for(tristeza=1; tristeza!=0; tristeza++){
+   for(tristeza=1; tristeza<10; tristeza++){
         return tristeza;
     }
 }
@@ -382,12 +383,15 @@ def p_return(p):
 NOVA CLASSE
 exemplo:
 
+class Sapato{
+}
+
 def p_class_new(p):
     '''stm : ID ID ASSIGN paramsClass SEMICOLON
              | ID ASSIGN paramsClass SEMICOLON
             '''
-    if(len(p) == 4):
-        p[0] = StmClasseNew(p[1], p[2], None)
+    if(len(p) == 6):
+        p[0] = StmClasseNew(p[1], p[2], p[4])
     elif(len(p) == 5):
         p[0] = StmClasseNew(None, p[1], p[3])
 
@@ -403,6 +407,13 @@ def p_exp_class(p):
 CLASSE COM PARAMETROS
 exemplo:
 
+class Sapato{
+	String nome;
+	Sapato(String nome){
+		this.nome = nome;
+	}
+}
+
 def p_class_new_params(p):
     '''paramsClass : NEW ID LPAREN paramsClass RPAREN
                     | NEW ID LPAREN exp17 RPAREN
@@ -416,6 +427,8 @@ def p_class_new_params(p):
 #####################################################################################
 IF
 exemplo:
+
+if()
 
 def p_ife(p):
     '''stm : s'''
@@ -814,29 +827,15 @@ void main(){
 }
 
 def p_exp16_and(p):
-    '''exp16 : exp17 AND exp16
-            | LPAREN exp17 AND exp16 RPAREN
-            | exp17'''
+    '''exp16 : terminal AND exp16
+            | LPAREN terminal AND exp16 RPAREN
+            | terminal'''
     if len(p) == 4:
         p[0] = AndExp(p[1], p[3])
     elif len(p) == 6:
         p[0] = AndExp(p[2], p[4])
     else:
         p[0] = p[1]
-
-
-#####################################################################################
-CALL
-exemplo:
-
-void main(){
-    nomeFuncao();
-}
-
-def p_exp17_call(p):
-    '''exp17 : call '''
-    p[0] = CallExp(p[1])
-
 
 #####################################################################################
 EXPRESSÃO ID
@@ -845,7 +844,7 @@ exemplo:
 PALAVRA
 
 def p_exp_id(p):
-    '''exp17 : ID
+    '''terminal : ID
              | NULL'''
     p[0] = IdExp(p[1])
 
@@ -860,7 +859,7 @@ void main(){
 
 
 def p_exp_bool(p):
-    '''exp17 : TRUE
+    '''terminal : TRUE
               | FALSE'''
     p[0] = BooleanExp(p[1])
 
@@ -872,8 +871,8 @@ exemplo:
 NUMBER
 
 def p_exp_number(p):
-    '''exp17 : NUMBER'''
-    p[0] = NumExp(p[1]) 
+    '''terminal : NUMBER'''
+    p[0] = NumExp(p[1])
 
 
 #####################################################################################
@@ -898,7 +897,7 @@ void main(){
     banana is int;
 }
 def p_is(p):
-    '''exp17 : ID IS ID
+    '''terminal : ID IS ID
     '''
     p[0] = IsExp(p[1], p[3])
 
@@ -911,7 +910,7 @@ void main(){
 }
 
 def p_this(p):
-    ''' exp17 : THIS DOT ID ASSIGN ID
+    ''' terminal  : THIS DOT ID ASSIGN ID
               '''
     p[0] = AssignThis(p[3], p[5])
 
@@ -924,7 +923,7 @@ void main(){
 }
 
 def p_plus_plus(p):
-    ''' exp17 : ID SUM SUM'''
+    ''' terminal : ID SUM SUM'''
     p[0] = PlusPlusExp(p[1])
 
 #####################################################################################

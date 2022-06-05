@@ -304,9 +304,9 @@ def p_exp15_or(p):
 
 
 def p_exp16_and(p):
-    '''exp16 : terminal AND exp16
-            | LPAREN terminal AND exp16 RPAREN
-            | terminal'''
+    '''exp16 : exp17 AND exp16
+            | LPAREN exp17 AND exp16 RPAREN
+            | exp17 '''
     if len(p) == 4:
         p[0] = AndExp(p[1], p[3])
     elif len(p) == 6:
@@ -314,6 +314,13 @@ def p_exp16_and(p):
     else:
         p[0] = p[1]
 
+def p_exp17_pot(p):
+    '''exp17 : terminal XOR exp17
+              | terminal  '''
+    if(len(p) == 4):
+        p[0] = PotExp(p[1], p[3])
+    else:
+        p[0] = p[1]
 
 '''
 Terminais
@@ -503,4 +510,4 @@ def p_error(p):
     print("Syntax error in input!")
 
 
-parser = yacc.yacc(debug=True)
+parser = yacc.yacc()

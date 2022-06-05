@@ -3,11 +3,23 @@ from abc import ABCMeta
 
 class AbstractVisitor(metaclass=ABCMeta):
     @abstractmethod
-    def visitFuncDeclConcrete(self, funcDecl):
+    def visitImporteConcrete(self, importeConcrete):
         pass
 
     @abstractmethod
-    def visitSignatureConcrete(self, signature):
+    def visitClasseConcrete(self, classeConcrete):
+        pass
+
+    @abstractmethod
+    def visitFuncDeclConcrete(self, funcDeclConcrete):
+        pass
+
+    @abstractmethod
+    def visitStmsignatureType(self, signatureType):
+        pass
+
+    @abstractmethod
+    def visitSignatureConcrete(self, signatureConcrete):
         pass
 
     @abstractmethod
@@ -19,7 +31,7 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visitBodyConcrete(self, body):
+    def visitBodyConcrete(self, bodyConcrete):
         pass
 
     @abstractmethod
@@ -31,15 +43,27 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visitStmExp(self, stmExp):
-        pass
-
-    @abstractmethod
     def visitStmWhile(self, stmWhile):
         pass
 
     @abstractmethod
+    def visitStmExp(self, stmExp):
+        pass
+
+    @abstractmethod
+    def visitStmFore(self, stmFore):
+        pass
+
+    @abstractmethod
     def visitStmReturn(self, stmReturn):
+        pass
+
+    @abstractmethod
+    def visitStmClasseNew(self, injecaoClass):
+        pass
+
+    @abstractmethod
+    def visitStmClasseNewParams(self, injecaoClass):
         pass
 
     @abstractmethod
@@ -51,7 +75,63 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def visitSubExp(self, subExp):
+        pass
+
+    @abstractmethod
     def visitMulExp(self, mulExp):
+        pass
+
+    @abstractmethod
+    def visitDivExp(self, divExp):
+        pass
+
+    @abstractmethod
+    def visitDivPartExp(self, divPartExp):
+        pass
+
+    @abstractmethod
+    def visitDivRestExp(self, divRestExp):
+        pass
+
+    @abstractmethod
+    def visitInvertExp(self, invertExp):
+        pass
+
+    @abstractmethod
+    def visitEqualsExp(self, equalsExp):
+        pass
+
+    @abstractmethod
+    def visitDiffExp(self, diffExp):
+        pass
+
+    @abstractmethod
+    def visitGreaterExp(self, greaterExp):
+        pass
+
+    @abstractmethod
+    def visitLessExp(self, lessExp):
+        pass
+
+    @abstractmethod
+    def visitGreaterEqualsExp(self, greaterEqualsExp):
+        pass
+
+    @abstractmethod
+    def visitLessEqualsExp(self, lessEqualsExp):
+        pass
+
+    @abstractmethod
+    def visitInvertBooleanExp(self, invertBooleanExp):
+        pass
+
+    @abstractmethod
+    def visitOrExp(self, orExp):
+        pass
+
+    @abstractmethod
+    def visitAndExp(self, andExp):
         pass
 
     @abstractmethod
@@ -63,10 +143,6 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visitNumExp(self, numExp):
-        pass
-
-    @abstractmethod
     def visitIdExp(self, idExp):
         pass
 
@@ -75,11 +151,51 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def visitNumExp(self, numExp):
+        pass
+
+    @abstractmethod
+    def visitIsExp(self, isExp):
+        pass
+
+    @abstractmethod
+    def visitAssignThis(self, assignThis):
+        pass
+
+    @abstractmethod
+    def visitPlusPlusExp(self, plusExp):
+        pass
+
+    @abstractmethod
+    def visitMinusMinusExp(self, minusExp):
+        pass
+
+    @abstractmethod
+    def visitStringExp(self, stringExp):
+        pass
+
+    @abstractmethod
+    def visitStmVar(self, stmExp):
+        pass
+
+    @abstractmethod
+    def visitStmVariableDeclaration(self, variable):
+        pass
+
+    @abstractmethod
+    def visitStmVariableDeclarationValue(self, variable):
+        pass
+
+    @abstractmethod
     def visitParamsCall(self, paramsCall):
         pass
 
     @abstractmethod
-    def visitNoParamsCall(self, simpleCall):
+    def visitNoParamsCall(self, paramsCall):
+        pass
+
+    @abstractmethod
+    def visitSingleParam(self, singleParam):
         pass
 
     @abstractmethod
@@ -87,5 +203,7 @@ class AbstractVisitor(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def visitSingleParam(self, singleParam):
+    def visitStmIfe(self, stmIfe):
         pass
+
+    

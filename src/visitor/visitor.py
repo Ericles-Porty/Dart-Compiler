@@ -18,6 +18,11 @@ class Visitor(AbstractVisitor):
         importeConcrete.string.accept(self)
         print(';')
 
+    def visitClasseConcrete(self, classeConcrete):
+        print(blank(), classeConcrete.type, ' ', end='', sep='')
+        print(classeConcrete.id, end='', sep='')
+        classeConcrete.body.accept(self)
+
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
         if(funcDeclConcrete.body != None):
@@ -25,10 +30,13 @@ class Visitor(AbstractVisitor):
         elif(funcDeclConcrete.body == None):
             print(';')
 
-    def visitClasseConcrete(self, classeConcrete):
-        print(blank(), classeConcrete.type, ' ', end='', sep='')
-        print(classeConcrete.id, end='', sep='')
-        classeConcrete.body.accept(self)
+    def visitStmsignatureType(self, signatureType):
+        print(signatureType.staticT, ' ', end='', sep='')
+        print(signatureType.type, ' ', end='', sep='')
+        print(signatureType.id, '(', end='', sep='')
+        if (signatureType.sigParams != None):
+            signatureType.sigParams.accept(self)
+        print(')', end='')
 
     def visitSignatureConcrete(self, signatureConcrete):
         print(blank(), signatureConcrete.type, ' ', end='', sep='')
@@ -46,30 +54,6 @@ class Visitor(AbstractVisitor):
         print(compoundSigParams.id, ', ', end='', sep='')
         compoundSigParams.sigParams.accept(self)
 
-    def visitStmsignatureType(self, signatureType):
-        print(signatureType.staticT, ' ', end='', sep='')
-        print(signatureType.type, ' ', end='', sep='')
-        print(signatureType.id, '(', end='', sep='')
-        if (signatureType.sigParams != None):
-            signatureType.sigParams.accept(self)
-        print(')', end='')
-
-    def visitStmClasseNew(self, injecaoClass):
-        print(blank(), end='')
-        if (injecaoClass.s1 != None):
-            print(injecaoClass.s1, end=' ', sep='')
-        print(injecaoClass.s2, end='', sep='')
-        print(end=' = ', sep='')
-        injecaoClass.paramsClass.accept(self)
-        print(';')
-
-    def visitStmClasseNewParams(self, injecaoClass):
-        print('new ', end='', sep='')
-        print(injecaoClass.name, '(', end='', sep='')
-        if (injecaoClass.paramsClass != None):
-            injecaoClass.paramsClass.accept(self)
-        print(')', end='')
-
     def visitBodyConcrete(self, bodyConcrete):
         global tab
         print('{ ')
@@ -79,6 +63,10 @@ class Visitor(AbstractVisitor):
         tab = tab - 3
         print(blank(), '} ', sep='')
 
+#
+# Stms e stm
+#
+
     def visitSingleStm(self, singleStm):
         singleStm.stm.accept(self)
 
@@ -86,38 +74,15 @@ class Visitor(AbstractVisitor):
         compoundStm.stm.accept(self)
         compoundStm.stms.accept(self)
 
-    def visitStmExp(self, stmExp):
-        print(blank(), sep='', end='')
-        stmExp.exp.accept(self)
-        print(';')
-
-    def visitStmVar(self, stmVar):
-        stmVar.exp.accept(self)
-
-    def visitStmVariableDeclaration(self, variable):
-        # if variable.type_var in Types:
-        if(variable.type_type != None):
-            print(variable.type_type, ' ', end='')
-        print(variable.type_var, ' ', variable.name, end='', sep='')
-
-    def visitStmVariableDeclarationValue(self, variable):
-        # if variable.type_var in Types:
-        if(variable.type_type != None):
-            print(variable.type_type, '', end='')
-        if(variable.type_var != None):
-            print(variable.type_var, end=' ')
-        print(variable.name, ' = ', sep='', end='')
-        variable.exp.accept(self)
-
     def visitStmWhile(self, stmWhile):
         print(blank(), 'while (', end='', sep='')
         stmWhile.exp.accept(self)
         print(')', end='', sep='')
         stmWhile.block.accept(self)
 
-    def visitStmReturn(self, stmReturn):
-        print(blank(), 'return ', end='', sep='')
-        stmReturn.exp.accept(self)
+    def visitStmExp(self, stmExp):
+        print(blank(), sep='', end='')
+        stmExp.exp.accept(self)
         print(';')
 
     def visitStmFore(self, stmFore):
@@ -142,20 +107,30 @@ class Visitor(AbstractVisitor):
     #     print(blank(), end='')
     #     stmFore.stm.accept(self)
 
-    def visitStmIfe(self, stmIfe):
-        print(blank(), 'if(', end='', sep='')
-        stmIfe.expif.accept(self)
-        print(')', end='')
-        stmIfe.s11.accept(self)
-        # print(blank(),  end='', sep='')
-        if stmIfe.s12 != None:
-            print(blank(),  end='', sep='')
-            print('else ')
-            print(blank(),  end='', sep='')
-            # print(stmIfe.s12)
-            stmIfe.s12.accept(self)
+    def visitStmReturn(self, stmReturn):
+        print(blank(), 'return ', end='', sep='')
+        stmReturn.exp.accept(self)
+        print(';')
 
-        # s12 else
+    def visitStmClasseNew(self, injecaoClass):
+        print(blank(), end='')
+        if (injecaoClass.s1 != None):
+            print(injecaoClass.s1, end=' ', sep='')
+        print(injecaoClass.s2, end='', sep='')
+        print(end=' = ', sep='')
+        injecaoClass.paramsClass.accept(self)
+        print(';')
+
+    def visitStmClasseNewParams(self, injecaoClass):
+        print('new ', end='', sep='')
+        print(injecaoClass.name, '(', end='', sep='')
+        if (injecaoClass.paramsClass != None):
+            injecaoClass.paramsClass.accept(self)
+        print(')', end='')
+
+#
+# Regras exp
+#
 
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")
@@ -163,23 +138,11 @@ class Visitor(AbstractVisitor):
         print(' = ', end='')
         assignExp.exp2.accept(self)
 
-    def visitAssignThis(self, assignThis):
-        print("This.", end='')
-        print(assignThis.s1, end='')
-        print(' =', assignThis.s2, end='')
-        # assignThis.s2.accept(self)
-
     def visitSomaExp(self, somaExp):
         # print("visitSomaExp")
         somaExp.exp1.accept(self)
         print(' + ', end='')
         somaExp.exp2.accept(self)
-
-    def visitMulExp(self, mulExp):
-        # print("visitMulExp")
-        mulExp.exp1.accept(self)
-        print(' * ', end='')
-        mulExp.exp2.accept(self)
 
     def visitSubExp(self, subExp):
         # print("visitMulExp")
@@ -187,11 +150,11 @@ class Visitor(AbstractVisitor):
         print(' - ', end='')
         subExp.exp2.accept(self)
 
-    def visitPotExp(self, potExp):
-        # print("visitPotExp")
-        potExp.exp1.accept(self)
-        print(' ^ ', end='')
-        potExp.exp2.accept(self)
+    def visitMulExp(self, mulExp):
+        # print("visitMulExp")
+        mulExp.exp1.accept(self)
+        print(' * ', end='')
+        mulExp.exp2.accept(self)
 
     def visitDivExp(self, divExp):
         # print("visitPotExp")
@@ -270,33 +233,67 @@ class Visitor(AbstractVisitor):
         print(' && ', end='')
         andExp.exp2.accept(self)
 
+    def visitPotExp(self, potExp):
+        # print("visitPotExp")
+        potExp.exp1.accept(self)
+        print(' ^ ', end='')
+        potExp.exp2.accept(self)
+
+#
+# Terminais
+#
+
     def visitCallExp(self, callExp):
         # print("visitCallExp")
         callExp.call.accept(self)
-
-    def visitNumExp(self, numExp):
-        # print("visitNumExp")
-        print(numExp.num, end='')
 
     def visitIdExp(self, idExp):
         # print("visitIdExp")
         print(idExp.id,  end='')
         # print(idExp.id, ';', end='')
 
-    def visitStringExp(self, stringExp):
-        print('"', stringExp.id, '"', end='', sep='')
-
     def visitBooleanExp(self, booleanExp):
         print(booleanExp.boolValue, end='')
 
-    def visitIsExp(self, IsExp):
-        print(IsExp.exp1, ' is ', IsExp.exp2, sep='', end='')
+    def visitNumExp(self, numExp):
+        # print("visitNumExp")
+        print(numExp.num, end='')
 
-    def visitPlusPlusExp(self, PlusExp):
-        print(PlusExp.id, '++', end='', sep='')
+    def visitIsExp(self, isExp):
+        print(isExp.exp1, ' is ', isExp.exp2, sep='', end='')
 
-    def visitMinusMinusExp(self, MinusExp):
-        print(MinusExp.id, '--', end='', sep='')
+    def visitAssignThis(self, assignThis):
+        print("This.", end='')
+        print(assignThis.s1, end='')
+        print(' =', assignThis.s2, end='')
+        # assignThis.s2.accept(self)
+
+    def visitPlusPlusExp(self, plusExp):
+        print(plusExp.id, '++', end='', sep='')
+
+    def visitMinusMinusExp(self, minusExp):
+        print(minusExp.id, '--', end='', sep='')
+
+    def visitStringExp(self, stringExp):
+        print('"', stringExp.id, '"', end='', sep='')
+
+    def visitStmVar(self, stmVar):
+        stmVar.exp.accept(self)
+
+    def visitStmVariableDeclaration(self, variable):
+        # if variable.type_var in Types:
+        if(variable.type_type != None):
+            print(variable.type_type, ' ', end='')
+        print(variable.type_var, ' ', variable.name, end='', sep='')
+
+    def visitStmVariableDeclarationValue(self, variable):
+        # if variable.type_var in Types:
+        if(variable.type_type != None):
+            print(variable.type_type, '', end='')
+        if(variable.type_var != None):
+            print(variable.type_var, end=' ')
+        print(variable.name, ' = ', sep='', end='')
+        variable.exp.accept(self)
 
     def visitParamsCall(self, paramsCall):
         # print("visitParamsCall")
@@ -308,12 +305,35 @@ class Visitor(AbstractVisitor):
         # print("visitSimpleCall")
         print(blank(), simpleCall.id, '()', end='', sep='')
 
+    def visitSingleParam(self, singleParam):
+        # print("visitSingleParam")
+        singleParam.exp.accept(self)
+
     def visitCompoundParams(self, compoundParams):
         # print("visitCompoundParams")
         compoundParams.exp.accept(self)
         print(', ', end='')
         compoundParams.params.accept(self)
 
-    def visitSingleParam(self, singleParam):
-        # print("visitSingleParam")
-        singleParam.exp.accept(self)
+#
+# Regras if
+#
+
+    def visitStmIfe(self, stmIfe):
+        print(blank(), 'if(', end='', sep='')
+        stmIfe.expif.accept(self)
+        print(')', end='')
+        stmIfe.s11.accept(self)
+        # print(blank(),  end='', sep='')
+        if stmIfe.s12 != None:
+            print(blank(),  end='', sep='')
+            print('else ')
+            print(blank(),  end='', sep='')
+            # print(stmIfe.s12)
+            stmIfe.s12.accept(self)
+
+        # s12 else
+
+
+
+    

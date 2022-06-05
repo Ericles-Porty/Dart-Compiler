@@ -144,9 +144,9 @@ def main():
              }'''
 
     operacoes = ''' void main() {
-                  int a = 9+9*9+9;
+                  9^2;
                 }'''
-    result = parser.parse(s3)
+    result = parser.parse(operacoes)
     # print(result)
     # visitor = SemanticVisitor()
     visitor = Visitor()

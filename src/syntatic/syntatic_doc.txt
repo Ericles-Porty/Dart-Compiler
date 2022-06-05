@@ -209,14 +209,6 @@ def p_stms(p):
         p[0] = CompoundStm(p[1], p[2])
 
 #####################################################################################
-VARIAVEIS
-
-def p_variables(p):
-    ''' exp17 : variableDeclaration '''
-    p[0] = StmVar(p[1])
-
-
-#####################################################################################
 DECLARA VARIAVEIS
 exemplo:
 void main(){
@@ -230,8 +222,8 @@ def p_variableDeclaration(p):
 #####################################################################################
 DECLARA TIPO DAS VARIAVEIS
 exemplo:
-static void main(){
-    int a;
+void main(){
+    static int a;
 }
 
 def p_variableDeclarationType(p):
@@ -247,7 +239,7 @@ void main(){
 }
 
 def p_variableDeclarationValue(p):
-    ''' variableDeclaration : ID ID ASSIGN exp17 
+    ''' variableDeclaration : ID ID ASSIGN terminal 
                  '''
     p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])
 
@@ -259,12 +251,12 @@ void main(){
 }
 
 def p_variableDeclarationValueType(p):
-    ''' variableDeclaration : ID ID ID ASSIGN exp17 
+    ''' variableDeclaration : ID ID ID ASSIGN terminal 
                  '''
     p[0] = StmVariableDeclarationValue(p[1], p[2], p[3], p[5])
   
 #####################################################################################
-UILE (enquanto)
+WHILE (enquanto)
 exemplos:
 void main(){
     while (i==1){
@@ -371,7 +363,7 @@ def p_s2(p):
 RETURN
 exemplo:
 void main(){
-	return 0;
+    return 0;
 }
 
 def p_return(p):
@@ -383,8 +375,9 @@ def p_return(p):
 NOVA CLASSE
 exemplo:
 
-class Sapato{
-}
+Livro livro = new Livro();
+
+livro = new Livro();
 
 def p_class_new(p):
     '''stm : ID ID ASSIGN paramsClass SEMICOLON
@@ -395,24 +388,14 @@ def p_class_new(p):
     elif(len(p) == 5):
         p[0] = StmClasseNew(None, p[1], p[3])
 
-#####################################################################################
-EXPRESSÃO DE CLASSE
-exemplo:
-
-def p_exp_class(p):
-    ''' exp17 : paramsClass '''
-    p[0] = p[1]
 
 #####################################################################################
 CLASSE COM PARAMETROS
 exemplo:
 
-class Sapato{
-	String nome;
-	Sapato(String nome){
-		this.nome = nome;
-	}
-}
+od = new od(new odItem(new odItem()));
+od = new od(5);
+od = new od();
 
 def p_class_new_params(p):
     '''paramsClass : NEW ID LPAREN paramsClass RPAREN
@@ -424,46 +407,15 @@ def p_class_new_params(p):
     else:
         p[0] = StmClasseNewParams(p[2], None)
 
-#####################################################################################
-IF
-exemplo:
-
-if()
-
-def p_ife(p):
-    '''stm : s'''
-    p[0] = p[1]
-
-
-#####################################################################################
-IF COM E SEM BLOCO
-exemplo:
-void main(){
-    if()
-}
-
-def p_s(p):
-    ''' s :   s1 
-            | s2 '''
-    p[0] = p[1]
-
-#####################################################################################
-IF QUE SAI DA RECURSÃO DO IF
-exemplo:
-void main(){
-    if()
-}
-
-def p_s1_if0(p):
-    ''' s1 : stms 
-    '''
-    p[0] = p[1]
 
 #####################################################################################
 IF 
 exemplo:
 void main(){
-    if()
+    if(a=0)
+    	int a = 0;
+    else 
+    	int a = 0;
 }
 def p_s1_if1(p):
     ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
@@ -474,9 +426,12 @@ def p_s1_if1(p):
 
 exemplo:
 void main(){
-    if()
+    if(a=0){
+    	int a = 0;
+    } else{ 
+    	int a = 0;
+    }
 }
-
 def p_s1_if2(p):
     ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
     '''
@@ -487,6 +442,14 @@ def p_s1_if2(p):
 exemplo:
 void main(){
     if()
+	    if(2==1){
+		i++;
+	    } 
+	    else{
+	    if(2==1){
+    		i++;
+    	    } 
+    	}
 }
 
 def p_s1_if3(p):
@@ -498,7 +461,13 @@ def p_s1_if3(p):
 
 exemplo:
 void main(){
-    if()
+    if(){
+    
+    } else {
+    	if(2==1){
+    	i++;
+    } 
+    }
 }
 
 def p_s1_if4(p):
@@ -511,6 +480,9 @@ def p_s1_if4(p):
 exemplo:
 void main(){
     if()
+    	if(2==1){
+    		i++;
+    } 
 }
 
 def p_s2_if1(p):
@@ -522,7 +494,9 @@ def p_s2_if1(p):
 
 exemplo:
 void main(){
-    if()
+    if(){
+    	i++;
+    }
 }
 
 def p_s2_if2(p):
@@ -534,7 +508,16 @@ def p_s2_if2(p):
 
 exemplo:
 void main(){
-    if()
+    if(2==1){
+    	if(2==1){
+    	i++;
+    } 
+    } 
+    else{
+    	if(i==1){
+	    i--;
+	}
+    }
 }
 
 def p_s2_if3(p):
@@ -546,7 +529,14 @@ def p_s2_if3(p):
 
 exemplo:
 void main(){
-    if()
+    if(2==1){
+    	i++;
+    } 
+    else{
+    	if(i==1){
+	    i--;
+	}
+    }
 }
 
 def p_s2_if4(p):
@@ -734,7 +724,7 @@ MENOR QUE
 exemplo:
 
 void main(){
-    a > 4;
+    a < 4;
 }
 
 def p_exp11_less(p):
@@ -784,7 +774,9 @@ MAIOR QUE
 exemplo:
 
 void main(){
-    !(TRUE);
+    if(!(1==0)){
+    	i++;
+    }
 }
 
 def p_exp14_invert_expr(p):
@@ -841,7 +833,9 @@ def p_exp16_and(p):
 EXPRESSÃO ID
 exemplo:
 
-PALAVRA
+void main(){
+    aaa = a;
+}
 
 def p_exp_id(p):
     '''terminal : ID
@@ -868,8 +862,9 @@ def p_exp_bool(p):
 NUMERO
 exemplo:
 
-NUMBER
-
+void main(){
+    int i  = 54894564;
+}
 def p_exp_number(p):
     '''terminal : NUMBER'''
     p[0] = NumExp(p[1])
@@ -967,9 +962,6 @@ def p_params_ids(p):
         p[0] = CompoundParams(p[1], p[3])
 
 #####################################################################################
-ERRO
-exemplo:
-printa o erro
 
 def p_error(p):
     print("Syntax error in input!")

@@ -116,6 +116,7 @@ class CompoundSigParams(SigParams):
     def accept(self, visitor):
         return visitor.visitCompoundSigParams(self)
 
+
 class StmsignatureType(SigParams):
     def __init__(self, staticT, type, id, sigParams):
         self.staticT = staticT
@@ -213,6 +214,7 @@ class StmVariableDeclaration(Stm):
     def accept(self, visitor):
         return visitor.visitStmVariableDeclaration(self)
 
+
 class StmVariableDeclarationValue(Stm):
     def __init__(self, type_type, type_var, name, exp):
         self.type_type = type_type
@@ -222,6 +224,7 @@ class StmVariableDeclarationValue(Stm):
 
     def accept(self, visitor):
         return visitor.visitStmVariableDeclarationValue(self)
+
 
 class StmWhile(Stm):
     def __init__(self, exp, block):
@@ -270,6 +273,7 @@ class StmIfe(Stm):
     def accept(self, visitor):
         return visitor.visitStmIfe(self)
 
+
 class StmClasseNew(Stm):
     def __init__(self, s1, s2, paramsClass):
         self.s1 = s1
@@ -279,6 +283,7 @@ class StmClasseNew(Stm):
     def accept(self, visitor):
         return visitor.visitStmClasseNew(self)
 
+
 class StmClasseNewParams(Stm):
     def __init__(self, name, paramsClass):
         self.name = name
@@ -286,6 +291,7 @@ class StmClasseNewParams(Stm):
 
     def accept(self, visitor):
         return visitor.visitStmClasseNewParams(self)
+
 
 '''
 Expressoes
@@ -516,6 +522,7 @@ class IsExp(Exp):
     def accept(self, visitor):
         return visitor.visitIsExp(self)
 
+
 class PlusPlusExp(Exp):
     def __init__(self, id):
         self.id = id
@@ -523,12 +530,15 @@ class PlusPlusExp(Exp):
     def accept(self, visitor):
         return visitor.visitPlusPlusExp(self)
 
+
 class MinusMinusExp(Exp):
     def __init__(self, id):
         self.id = id
 
     def accept(self, visitor):
         return visitor.visitMinusMinusExp(self)
+
+
 '''
 Chamada de funcao
 Call

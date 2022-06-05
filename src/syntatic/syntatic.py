@@ -396,6 +396,11 @@ def p_variable_declaration_type(p):
     p[0] = StmVariableDeclaration(p[1], p[2], p[3])
 
 
+def p_variable_value(p):
+    '''variableDeclaration : ID ASSIGN exp'''
+    p[0] = StmVariableDeclarationValue(None, None, p[1], p[3])
+
+
 def p_variable_declaration_value(p):
     ''' variableDeclaration : ID ID ASSIGN exp'''
     p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])

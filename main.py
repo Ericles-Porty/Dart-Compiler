@@ -2,17 +2,14 @@ from src.lexic.lexic import lexer
 from src.syntatic.syntatic import parser
 from src.syntatic.syntax_abstract import *
 from src.visitor.abstract_visitor import *
-from src.visitor.visitor import * 
+from src.visitor.visitor import *
 from src.visitor.semantic_visitor import *
-
-
-
 
 
 # lexer.input('''if(1==2 if || 2>=8)  is else return ''')
 
 # for tok in lexer:
-#   print(f'Chave:{tok.type}\t\t Valor:{tok.value}\t\t Linha:{tok.lineno}\t\t Posicao:{tok.lexpos}') 
+#   print(f'Chave:{tok.type}\t\t Valor:{tok.value}\t\t Linha:{tok.lineno}\t\t Posicao:{tok.lexpos}')
 
 def main():
     s = '''
@@ -137,7 +134,7 @@ def main():
                int c = !(a==b);
                8||8;
                8 && 8;
-               //a = 'Aq';
+               a = 'q';
                string a = "Aq";
             
                string a = 'Aq';
@@ -149,7 +146,7 @@ def main():
     operacoes = ''' void main() {
                   int a = 9+9*9+9;
                 }'''
-    result = parser.parse(s3,debug=True)
+    result = parser.parse(s3)
     # print(result)
     # visitor = SemanticVisitor()
     visitor = Visitor()
@@ -165,5 +162,6 @@ def main():
   #     result = parser.parse(s)
   #     print(result)
 
+
 if __name__ == "__main__":
-  main()
+    main()

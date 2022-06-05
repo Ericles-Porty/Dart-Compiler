@@ -97,16 +97,17 @@ class Visitor(AbstractVisitor):
     def visitStmVariableDeclaration(self, variable):
         # if variable.type_var in Types:
         if(variable.type_type != None):
-            print(variable.type_type, ' ', end='') 
+            print(variable.type_type, ' ', end='')
         print(variable.type_var, ' ', variable.name, end='', sep='')
 
     def visitStmVariableDeclarationValue(self, variable):
-        if variable.type_var in Types:
-            if(variable.type_type != None):
-               print(variable.type_type, '', end='') 
-            print(variable.type_var, ' ', variable.name,
-                  ' = ', sep='', end='')
-            variable.exp.accept(self)
+        # if variable.type_var in Types:
+        if(variable.type_type != None):
+            print(variable.type_type, '', end='')
+        if(variable.type_var != None):
+            print(variable.type_var, end=' ')
+        print(variable.name, ' = ', sep='', end='')
+        variable.exp.accept(self)
 
     def visitStmWhile(self, stmWhile):
         print(blank(), 'while (', end='', sep='')
@@ -153,8 +154,6 @@ class Visitor(AbstractVisitor):
             print(blank(),  end='', sep='')
             # print(stmIfe.s12)
             stmIfe.s12.accept(self)
-
-
 
         # s12 else
 
@@ -295,7 +294,7 @@ class Visitor(AbstractVisitor):
 
     def visitPlusPlusExp(self, PlusExp):
         print(PlusExp.id, '++', end='', sep='')
-    
+
     def visitMinusMinusExp(self, MinusExp):
         print(MinusExp.id, '--', end='', sep='')
 

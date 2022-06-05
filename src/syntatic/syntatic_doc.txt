@@ -1,11 +1,11 @@
 Referente ao funcionamento da parte sintática do  Analisador da Linguagem Dart
 // tentei, se ta errado pode apagar tudo
 // utilizei ##### para separar
-
+#####################################################################################
 IMPORT
 exemplos:
 import dart:convert;
-
+#######
 import dart:convert;
 import dart:asdasd;
 
@@ -21,58 +21,109 @@ def p_header(p):
     elif(len(p) == 5):
         p[0] = [ImporteConcrete(p[2])] + p[4]
 
-
+#####################################################################################
 PROGRAM
 exemplo:
 
 int nomeFunc(){
 
 }
-
-nomeClasse{
+######
+static void nomeFunc(int num1, String nome){
 
 }
+######
+class nomeClasse{
+
+}
+######
+class classeFicada{
+
+}
+######
+typedef nomeFunc(int num1, String nome);
+######
 
 def p_program(p):
     '''program : funcdecl
                 | funcdecl program                
                 | classe
+                | classe program
                 '''
     if (len(p) == 3):
         p[0] = [p[1]] + p[2]
     else:
         p[0] = [p[1]]
 
-
+#####################################################################################
 DECLARAÇÃO DE CLASSE
 exemplo:
 
-nomeClase(){}
+class nomeClasse{
+
+}
+######
 
 def p_classe(p):
     '''classe : CLASS ID body
-              | CLASS ID body program
               '''
-    if (len(p) == 4):
-        p[0] = ClasseConcrete(p[1], p[2], p[3])
-    # elif (len(p) == 5):
-    #     temp = ClasseConcrete(p[1], p[2], p[3])
-    #     p[0] = [temp] + p[4]
-
-
+    p[0] = ClasseConcrete(p[1], p[2], p[3])
+    
+#####################################################################################
 DECLARAÇÃO DE FUNÇÃO
-exemplo: void nomeFuncao(){
+exemplo: 
+void nomeFuncao(){
 
 }
+######
+static void nomeFunc(int num1, String nome){
+
+}
+#####
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
     p[0] = FuncDeclConcrete(p[1], p[2])
 
+#####################################################################################
+DECLARAÇÃO DE FUNÇÃO 2
+exemplo:
 
+typedef nomeFunc(int num1, String nome);
+#####
+void nomeLegal();
+#####
+def p_funcdeclOne(p):
+    '''funcdecl : signature SEMICOLON'''
+    p[0] = FuncDeclConcrete(p[1], None)
+    
+#####################################################################################
+SIGNATURE TYPE
+exemplo:
+static void nomeFunc(int num1, String nome){
+}
+###
+static int nomeFunfal(int num1){
+}
+
+def p_signatureType(p):
+    '''signature : ID ID ID LPAREN sigparams RPAREN
+                 | ID ID ID LPAREN RPAREN'''
+    if (isinstance(p[5], SigParams)):
+        p[0] = StmsignatureType(p[1], p[2], p[3], p[5])
+    else:
+        p[0] = StmsignatureType(p[1], p[2], p[3], None)
+#####################################################################################
 SIGNATURE
 exemplo:
-int nomeFunc ( int parametro )
+void nomeFuncao(){
+}
+#####
+void nomeFunc(int num1, String nome){
+}
+###
+int nomeFunfal(int num1){
+}
 
 def p_signature(p):
     '''signature : ID ID LPAREN sigparams RPAREN
@@ -82,11 +133,20 @@ def p_signature(p):
     else:
         p[0] = SignatureConcrete(p[1], p[2], None)
 
+#####################################################################################
 SIGPARAMS
 exemplo:
-int num
-##############
-int num1, int num2 
+void nomeFuncao(){
+
+}
+#####
+void nomeFunc(int num1, String nome){
+
+}
+###
+int nomeFunfal(int num1){
+
+}
 
 def p_sigparams(p):
     '''sigparams : ID ID
@@ -96,9 +156,23 @@ def p_sigparams(p):
         p[0] = SingleSigParams(p[1], p[2])
     else:
         p[0] = CompoundSigParams(p[1], p[2], p[4])
-
+        
+#####################################################################################
 BODE
 exemplo:
+void main(){
+    int a = 1;
+    while (a == 0){
+        a++;
+    }
+}
+#####
+void main(){
+
+}
+####
+void main()
+    return 6;
 
 def p_body(p):
     ''' body : LKEY stms RKEY
@@ -110,6 +184,20 @@ def p_body(p):
         p[0] = BodyConcrete(p[1])
     elif (len(p) == 3):
         p[0] = BodyConcrete(None)
+        
+#####################################################################################
+STMS
+exemplo:
+void main(){
+    int a = 1;
+    while (a == 0){
+        a++;
+    }
+}
+######
+void main(){
+    int a = 1;
+}
 
 def p_stms(p):
     ''' stms : stm
@@ -119,46 +207,104 @@ def p_stms(p):
     else:
         p[0] = CompoundStm(p[1], p[2])
 
+#####################################################################################
+VARIAVEIS
 
-PARAMETRO PONTO E VIRGULA
+def p_variables(p):
+    ''' exp17 : variableDeclaration '''
+    p[0] = StmVar(p[1])
+
+
+#####################################################################################
+DECLARA VARIAVEIS
 exemplo:
-1;
-nomeFuncao();
-while ( i<3 ){
+void main(){
+    int a;
 }
-for ( i=0; i<3; i++){
+
+def p_variableDeclaration(p):
+    ''' variableDeclaration : ID ID'''
+    p[0] = StmVariableDeclaration(None, p[1], p[2])
+
+#####################################################################################
+DECLARA TIPO DAS VARIAVEIS
+exemplo:
+static void main(){
+    int a;
 }
-return resposta(varia);
 
-def p_stm(p):
-    ''' stm :  exp SEMICOLON
-             | WHILE LPAREN exp RPAREN body
-             | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
-             | s             
-             | RETURN exp SEMICOLON'''
-    if (len(p) == 3):
-        p[0] = StmExp(p[1])
-    elif (p[1] == 'while'):
-        p[0] = StmWhile(p[3], p[5])
-    elif (p[1] == 'return'):
-        p[0] = StmReturn(p[2])
-        print(p[2])
-    else:
-        print('Gerei None', p[1])
+def p_variableDeclarationType(p):
+    '''variableDeclaration : ID ID ID'''
+    print("2")
+    p[0] = StmVariableDeclaration(p[1], p[2], p[3])
 
-def p_s(p):
-    ''' s :   s1 
-            | s2 '''
+#####################################################################################
+DECLARA VALOR DAS VARIAVEIS
+exemplo:
+void main(){
+    int a = 7;
+}
 
+def p_variableDeclarationValue(p):
+    ''' variableDeclaration : ID ID ASSIGN exp17 
+                 '''
+    p[0] = StmVariableDeclarationValue(None, p[1], p[2], p[4])
 
+#####################################################################################
+DECLARA VALOR E TIPO DAS VARIAVEIS
+exemplo:
+void main(){
+   static int a = 7;
+}
 
+def p_variableDeclarationValueType(p):
+    ''' variableDeclaration : ID ID ID ASSIGN exp17 
+                 '''
+    p[0] = StmVariableDeclarationValue(p[1], p[2], p[3], p[5])
+  
+#####################################################################################
+UILE (enquanto)
+exemplos:
+void main(){
+    while (i==1){
+    
+    }
+}
+
+def p_while(p):
+    ''' stm : WHILE LPAREN exp RPAREN body
+    '''
+    p[0] = StmWhile(p[3], p[5])
+#####################################################################################
 EXPRESSÃO
 exemplos:
-(num = 2)
-def p_e(p):
-    ''' e : LPAREN exp RPAREN '''
+void main(){
+   a = 1;
+}
 
+def p_exp(p):
+    ''' stm :  exp SEMICOLON
+    '''
+    p[0] = StmExp(p[1])
+
+#####################################################################################
+FOR (para)
+exemplos:
+void main(){
+   for(tristeza=1; tristeza!=0; tristeza++){
+        return tristeza;
+    }
+}
+
+def p_for(p):
+    ''' stm : FOR LPAREN variableDeclaration SEMICOLON exp SEMICOLON exp RPAREN body
+        | FOR LPAREN exp SEMICOLON exp SEMICOLON exp RPAREN body
+    '''
+    p[0] = StmFore(p[3], p[5], p[7], p[9])
+
+#####################################################################################
 IF E ELSE (SE E ENTÃO)
+#todos tem que estar dentro de uma função, como a main.
 exemplos:
 if (i<3)
 
@@ -190,7 +336,9 @@ def p_s1(p):
             | IF e body ELSE s1
             | stms '''
 
-
+#####################################################################################
+IF E ELSE 2
+#todos tem que estar dentro de uma função, como a main.
 exemplo:
 if (i<3)
 
@@ -218,10 +366,188 @@ def p_s2(p):
             | IF e s1 ELSE s2 
             | IF e body ELSE s2 '''
 
-
-PARAMETRO ASSINATURA (recebe)
+#####################################################################################
+RETURN
 exemplo:
-x = 7 
+void main(){
+	return 0;
+}
+
+def p_return(p):
+    ''' stm : RETURN exp SEMICOLON
+    '''
+    p[0] = StmReturn(p[2])
+
+#####################################################################################
+NOVA CLASSE
+exemplo:
+
+def p_class_new(p):
+    '''stm : ID ID ASSIGN paramsClass SEMICOLON
+             | ID ASSIGN paramsClass SEMICOLON
+            '''
+    if(len(p) == 4):
+        p[0] = StmClasseNew(p[1], p[2], None)
+    elif(len(p) == 5):
+        p[0] = StmClasseNew(None, p[1], p[3])
+
+#####################################################################################
+EXPRESSÃO DE CLASSE
+exemplo:
+
+def p_exp_class(p):
+    ''' exp17 : paramsClass '''
+    p[0] = p[1]
+
+#####################################################################################
+CLASSE COM PARAMETROS
+exemplo:
+
+def p_class_new_params(p):
+    '''paramsClass : NEW ID LPAREN paramsClass RPAREN
+                    | NEW ID LPAREN exp17 RPAREN
+                    | NEW ID LPAREN RPAREN
+              '''
+    if (len(p) == 6):
+        p[0] = StmClasseNewParams(p[2], p[4])
+    else:
+        p[0] = StmClasseNewParams(p[2], None)
+
+#####################################################################################
+IF
+exemplo:
+
+def p_ife(p):
+    '''stm : s'''
+    p[0] = p[1]
+
+
+#####################################################################################
+IF COM E SEM BLOCO
+exemplo:
+void main(){
+    if()
+}
+
+def p_s(p):
+    ''' s :   s1 
+            | s2 '''
+    p[0] = p[1]
+
+#####################################################################################
+IF QUE SAI DA RECURSÃO DO IF
+exemplo:
+void main(){
+    if()
+}
+
+def p_s1_if0(p):
+    ''' s1 : stms 
+    '''
+    p[0] = p[1]
+
+#####################################################################################
+IF 
+exemplo:
+void main(){
+    if()
+}
+def p_s1_if1(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE s1 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s1_if2(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE body 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s1_if3(p):
+    ''' s1 :  IF LPAREN exp RPAREN s1 ELSE body 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s1_if4(p):
+    ''' s1 :  IF LPAREN exp RPAREN body ELSE s1 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s2_if1(p):
+    ''' s2 :  IF LPAREN exp RPAREN s  
+    '''
+    p[0] = StmIfe(p[3], p[5], None)
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s2_if2(p):
+    ''' s2 :  IF LPAREN exp RPAREN body 
+    '''
+    p[0] = StmIfe(p[3], p[5], None)
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s2_if3(p):
+    ''' s2 :  IF LPAREN exp RPAREN s1 ELSE s2 
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+
+exemplo:
+void main(){
+    if()
+}
+
+def p_s2_if4(p):
+    ''' s2 :  IF LPAREN exp RPAREN body ELSE s2
+    '''
+    p[0] = StmIfe(p[3], p[5], p[7])
+
+#####################################################################################
+ASSINATURA (recebe)
+exemplo:
+
+void main(){
+    a = 4
+}
 
 def p_exp_assign(p):
     ''' exp :   exp ASSIGN exp1
@@ -231,11 +557,14 @@ def p_exp_assign(p):
     else:
         p[0] = AssignExp(p[1], p[3])
 
-
-EXPRESSÃO DE SOMA
+#####################################################################################
+SOMA
 exemplo:
-1 + 1
-num1 + num2
+
+void main(){
+    a + 4;
+}
+
 
 def p_exp1_sum(p):
     '''exp1 : exp1 SUM exp2
@@ -245,24 +574,29 @@ def p_exp1_sum(p):
     else:
         p[0] = SomaExp(p[1], p[3])
 
-
-EXPRESSÃO DE SUBTRAÇÃO
+#####################################################################################
+SUBTRAÇÃO
 exemplo:
-1 - 1
-num1 - num2
+
+void main(){
+    a - 4;
+}
 
 def p_exp2_sub(p):
-   '''exp2 : exp2 SUB exp3
-           | exp3'''
-   if len(p) == 2:
-       p[0] = p[1]
-   else:
-       p[0] = MulExp(p[1], p[3])
+    '''exp2 : exp2 SUB exp3
+            | exp3'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = SubExp(p[1], p[3])
 
-
-EXPRESSÃO DE TEMPO
+#####################################################################################
+MULTIPLICAÇÃO
 exemplo:
-4 \* 6
+
+void main(){
+    a * 4;
+}
 
 def p_exp3_times(p):
     '''exp3 : exp4 TIMES exp3
@@ -270,14 +604,17 @@ def p_exp3_times(p):
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = PotExp(p[1], p[3])
+        p[0] = MulExp(p[1], p[3])
 
-
+#####################################################################################
 DIVISÃO
-dividendo / divisor
-4 / 2
+exemplo:
 
-def p_exp4_times(p):
+void main(){
+    a / 4;
+}
+
+def p_exp4_div(p):
     '''exp4 : exp5 DIV exp4
             | exp5'''
     if len(p) == 2:
@@ -285,10 +622,13 @@ def p_exp4_times(p):
     else:
         p[0] = DivExp(p[1], p[3])
 
+#####################################################################################
+DIVISÃO
+exemplo:
 
-EXPRESSÃO DIVISÃO DA PARTE INTEIRA            
-dividendo ~/ divisor
-4 ~/ 2
+void main(){
+    a ~/ 4;
+}
 
 def p_exp5_div_part_int(p):
     '''exp5 : exp6 DIV_PART_INT exp5
@@ -298,11 +638,13 @@ def p_exp5_div_part_int(p):
     else:
         p[0] = DivPartExp(p[1], p[3])
 
-
-EXPRESSÃO DE RESTO
+#####################################################################################
+RESTO DE DIVISÃO 
 exemplo:
-numero1 % numero2
-4 % 2
+
+void main(){
+    a % 4;
+}
 
 def p_exp6_div_rest(p):
     '''exp6 : exp7 DIV_REST exp6
@@ -312,25 +654,29 @@ def p_exp6_div_rest(p):
     else:
         p[0] = DivRestExp(p[1], p[3])
 
-
-EXPRESSÃO DE INVERTER SINAL
+#####################################################################################
+INVERTE SINAL ARITIMETICO
 exemplo:
--expr (5)
--expr (numero)
+
+void main(){
+    -(4+5);
+}
 
 def p_exp7_invert_signal(p):
-    '''exp7 : SUB LPAREN exp8 RPAREN 
+    '''exp7 : SUB LPAREN exp RPAREN 
             | exp8'''
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = InvertExp(p[3])
-    
 
-EXPRESSÃO DE IGUALDADE
+#####################################################################################
+IGUALDADE
 exemplo:
-num1 == num2
 
+void main(){
+    4 == 4;
+}
 def p_exp8_equals(p):
     '''exp8 : exp9 EQUALS exp8  
             | exp9'''
@@ -339,11 +685,13 @@ def p_exp8_equals(p):
     else:
         p[0] = EqualsExp(p[1], p[3])
 
-
-EXPRESSÃO DE DIFERENTE 
+#####################################################################################
+DIFERENÇA
 exemplo:
-num != num2
 
+void main(){
+    5 != 4;
+}
 def p_exp9_diff(p):
     '''exp9 : exp10 DIFF exp9  
             | exp10'''
@@ -352,10 +700,13 @@ def p_exp9_diff(p):
     else:
         p[0] = DiffExp(p[1], p[3])
 
-
-EXPRESSÃO DE MAIOR QUE
+#####################################################################################
+MAIOR QUE
 exemplo:
-num1 > num2
+
+void main(){
+    a > 4;
+}
 
 def p_exp10_greater(p):
     '''exp10 : exp11 GREATER exp10  
@@ -365,10 +716,13 @@ def p_exp10_greater(p):
     else:
         p[0] = GreaterExp(p[1], p[3])
 
-
-EXPRESSÃO DE MENOR QUE
+#####################################################################################
+MENOR QUE
 exemplo:
-num1 < num2
+
+void main(){
+    a > 4;
+}
 
 def p_exp11_less(p):
     '''exp11 : exp12 LESS exp11 
@@ -378,10 +732,13 @@ def p_exp11_less(p):
     else:
         p[0] = LessExp(p[1], p[3])
 
-
-EXPRESSÃO DE MAIOR OU IGUAL QUE
+#####################################################################################
+MAIOR IGUAL QUE
 exemplo:
-num1 >= num2
+
+void main(){
+    a >= 4;
+}
 
 def p_exp12_greater_equals(p):
     '''exp12 : exp13 GREATER_EQ exp12 
@@ -392,9 +749,13 @@ def p_exp12_greater_equals(p):
         p[0] = GreaterEqualsExp(p[1], p[3])
 
 
-EXPRESSÃO DE MENOR OU IGUAL QUE
+#####################################################################################
+MENOR IGUAL QUE
 exemplo:
-num1 <= num2
+
+void main(){
+    a <= 4;
+}
 
 def p_exp13_less_equals(p):
     '''exp13 : exp14 LESS_EQ exp13 
@@ -405,107 +766,178 @@ def p_exp13_less_equals(p):
         p[0] = LessEqualsExp(p[1], p[3])
 
 
-INVERTER
+#####################################################################################
+MAIOR QUE
 exemplo:
-!True
+
+void main(){
+    !(TRUE);
+}
 
 def p_exp14_invert_expr(p):
-    '''exp14 : INVERT_EXPR exp15
+    '''exp14 : INVERT_EXPR LPAREN exp RPAREN
             | exp15'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = InvertBooleanExp(p[1], p[3])
+        p[0] = InvertBooleanExp(p[3])
 
 
-EXPRESSÃO DE "OU" QUE
+#####################################################################################
+OU
 exemplo:
-(num1 || num2)
+
+void main(){
+    if( a || b)
+	string b = 'cabo';
+}
 
 def p_exp15_or(p):
     '''exp15 : exp16 OR exp15
             | LPAREN exp16 OR exp15 RPAREN
             | exp16'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
+    if len(p) == 4:
         p[0] = OrExp(p[1], p[3])
+    elif len(p) == 6:
+        p[0] = OrExp(p[2], p[4])
+    else:
+        p[0] = p[1]
 
 
-EXPRESSÃO DE "E" QUE
+#####################################################################################
+OU
 exemplo:
-(num1 && num2)
+
+void main(){
+    if( a && b)
+	string b = 'jinhas';
+}
 
 def p_exp16_and(p):
     '''exp16 : exp17 AND exp16
             | LPAREN exp17 AND exp16 RPAREN
             | exp17'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
+    if len(p) == 4:
         p[0] = AndExp(p[1], p[3])
+    elif len(p) == 6:
+        p[0] = AndExp(p[2], p[4])
+    else:
+        p[0] = p[1]
 
+
+#####################################################################################
 CALL
-exemplo: 
-NUMBER
-ID
-TRUE
-FALSE
-NULL
+exemplo:
+
+void main(){
+    nomeFuncao();
+}
 
 def p_exp17_call(p):
-    '''exp17 : call
-            | NUMBER
-            | ID
-            | TRUE
-            | FALSE
-            | NULL'''
-    if isinstance(p[1], Call):
-        p[0] = CallExp(p[1])
-    elif isinstance(p[1], int):
-        p[0] = NumExp(p[1])
-    elif (p[1] == 'true' or p[1] == 'false'):
-        p[0] = BooleanExp(p[1])
-    else:
-        p[0] = IdExp(p[1])
+    '''exp17 : call '''
+    p[0] = CallExp(p[1])
 
 
-DECLARAÇÃO STRING 
+#####################################################################################
+EXPRESSÃO ID
 exemplo:
-"nomeID"
+
+PALAVRA
+
+def p_exp_id(p):
+    '''exp17 : ID
+             | NULL'''
+    p[0] = IdExp(p[1])
+
+
+#####################################################################################
+BOLEANO
+exemplo:
+
+void main(){
+    a = true;
+}
+
+
+def p_exp_bool(p):
+    '''exp17 : TRUE
+              | FALSE'''
+    p[0] = BooleanExp(p[1])
+
+
+#####################################################################################
+NUMERO
+exemplo:
+
+NUMBER
+
+def p_exp_number(p):
+    '''exp17 : NUMBER'''
+    p[0] = NumExp(p[1]) 
+
+
+#####################################################################################
+STRING
+exemplo:
+
+void main(){
+    string frase = "socorro nao aguento mais"
+}
 
 def p_string(p):
     '''string : DOUBLE_QUOTES ID DOUBLE_QUOTES  
+                | SINGLE_QUOTES ID SINGLE_QUOTES  
     '''
-    p[0] = p[2]
+    p[0] = StringExp(p[2])
 
-
-DECLARAÇÃO IS
+#####################################################################################
+IS
 exemplo:
-IS int
-IS String
 
+void main(){
+    banana is int;
+}
 def p_is(p):
-    '''is : IS type
+    '''exp17 : ID IS ID
     '''
-    p[0] = p[2]
+    p[0] = IsExp(p[1], p[3])
 
-
-DECLARAÇÃO TIPO
+#####################################################################################
+THIS
 exemplo:
-type : int
 
-def p_types(p):
-    ''' type : ID
-    '''
-    p[0] = p[1]
-  
+void main(){
+    this.naoacabanunca;
+}
 
-DECLARAÇÃO DE FUNÇÃO COM PARAMETRO
-exemplos:  
-nomeFunc(parametro)
+def p_this(p):
+    ''' exp17 : THIS DOT ID ASSIGN ID
+              '''
+    p[0] = AssignThis(p[3], p[5])
 
-nomeFunc()
+#####################################################################################
+MAIS MAIS
+exemplo:
+
+void main(){
+    i++;
+}
+
+def p_plus_plus(p):
+    ''' exp17 : ID SUM SUM'''
+    p[0] = PlusPlusExp(p[1])
+
+#####################################################################################
+CALL ID
+exemplo:
+
+void main(){
+    funcMileninhaDoGrau(ericlesFofinho);
+}
+####
+
+void main(){
+    funcJojoComSono();
 
 def p_call_id_params(p):
     '''call : ID LPAREN params RPAREN
@@ -515,21 +947,30 @@ def p_call_id_params(p):
     else:
         p[0] = NoParamsCall(p[1])
 
+#####################################################################################
+PARAMETROS ID
+exemplo:
+
+void main(){
+    funcMileninhaExistindo(ericlesReclamandoComEla);
+}
+###
+void main(){
+    funcMileninhaFalando(ericlesSurtando,jojoChorando);
+}
 
 def p_params_ids(p):
     '''params : exp COMMA params
-            | exp '''
+              | exp '''
     if len(p) == 2:
         p[0] = SingleParam(p[1])
     elif len(p) == 4:
         p[0] = CompoundParams(p[1], p[3])
 
+#####################################################################################
+ERRO
+exemplo:
+printa o erro
+
 def p_error(p):
     print("Syntax error in input!")
-
-
-CONVERSOR
-exemplo:
-int.parse("1");
-
-parser = yacc.yacc()

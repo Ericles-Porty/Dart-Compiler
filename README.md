@@ -1,4 +1,4 @@
-# Dart-Analyzer
+# Dart-Compiler
 Analisador léxico, sintático e semântico para a linguagem Dart.
 *******
 ## Sumário
